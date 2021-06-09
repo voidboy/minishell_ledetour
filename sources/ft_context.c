@@ -34,5 +34,5 @@ void	update_context(t_context *context, char current)
 
 void	context_error(void)
 {
-	ft_error(EMULTI, (const char *[]){"\n", NULL});
+	ft_error((const char *[]){_strerror(EMULTI), "\n", NULL});
 }

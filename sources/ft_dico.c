@@ -1,12 +1,12 @@
 #include "minishell.h"
 
-void ft_escape_declare(char *str)
+void ft_escape_declare(char *str, int fd)
 {
 	while (str && *str)
 	{
 		if (*str == '\\' || *str == '\"' || *str == '$')
-			ft_putchar_fd('\\', STDIN_FILENO);
-		ft_putchar_fd(*str, STDIN_FILENO);
+			ft_putchar_fd('\\', fd);
+		ft_putchar_fd(*str, fd);
 		str++;
 	}
 }	  
@@ -32,7 +32,7 @@ int ft_show_envp(t_dico *dico, int declare, int fd)
 			if (!declare)
 				ft_putstr_fd(var->value, fd);
 			else
-				ft_escape_declare(var->value);
+				ft_escape_declare(var->value, fd);
 			if (declare && var->scope != EXPORT)
 				ft_putstr_fd("\"", fd);
 			ft_putstr_fd("\n", fd);
@@ -132,7 +132,6 @@ char *ft_get_dico_value(char *key, t_dico *dico)
 	}
 	return (NULL);
 }
-
 
 t_var *ft_str_to_var(char *str, int verify)
 {

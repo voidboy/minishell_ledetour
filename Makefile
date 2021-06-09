@@ -8,13 +8,16 @@ SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_assign.c \
 			sources/ft_break.c \
 			sources/ft_btree.c \
-			sources/ft_builtin_utils.c \
+			sources/ft_echo.c \
+			sources/ft_pwd.c \
+			sources/ft_cd.c \
+			sources/ft_exit.c \
 			sources/ft_context.c \
 			sources/ft_cross.c \
 			sources/ft_dico.c \
 			sources/ft_error.c \
 			sources/ft_exec.c \
-			sources/ft_expension.c \
+			sources/ft_expander.c \
 			sources/ft_pipes.c \
 			sources/ft_prove.c \
 			sources/ft_quoting.c \
@@ -28,7 +31,7 @@ SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_env.c \
 			tests/btree_show.c \
 			tests/dico_show.c \
-			tests/minishell.c
+			tests/toby.c
 
 OBJS	=	$(SRCS:.c=.o)
 
@@ -36,7 +39,7 @@ all		:	$(NAME)
 
 $(NAME)	:	$(OBJS) 
 			make bonus -j 4 -C libft
-			$(CC) $(FLAG) -o $(NAME) $(OBJS) libft/libft.a
+			$(CC) $(FLAG) -o $(NAME) $(OBJS) libft/libft.a -lncurses
 
 %.o		:	%.c
 			$(CC) $(FLAG) -o $@ -c $<  

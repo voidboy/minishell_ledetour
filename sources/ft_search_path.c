@@ -19,7 +19,7 @@ static char	*no_path(char *exec)
 	fd = open(exec, O_RDONLY);
 	if (fd == -1)
 	{
-		ft_error(EEMPTY, (const char *[]){exec,
+		ft_error((const char *[]){_strerror(EEMPTY), exec,
 			": No such file or directory\n", NULL});
 		return (NULL);
 	}
@@ -48,7 +48,7 @@ static char	*path_lookup(char *exec, char *path)
 	found = NULL;
 	i = -1;
 	paths = ft_split(path, ':');
-	while (paths[++i])
+	while (paths && paths[++i])
 	{
 		if (paths[i][ft_strlen(paths[i]) - 1] != '/')
 			paths[i] = ft_strjoin_free(paths[i], "/");
@@ -76,6 +76,6 @@ char	*ft_search_path(char *exec, char *path)
 		return (ft_strdup(no_path(exec)));
 	found = path_lookup(exec, path);
 	if (!found)
-		ft_error(EEMPTY, (const char *[]){exec, ": command not found\n", NULL});
+		ft_error((const char *[]){_strerror(EEMPTY), exec, ": command not found\n", NULL});
 	return (found);
 }

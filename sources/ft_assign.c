@@ -59,7 +59,7 @@ void ft_show_lstassign(void *content)
 	t_index_var *ivar;
 
 	ivar = content;
-	printf("{%d - %d - %d}\n", ivar->key, ivar->equal, ivar->value);
+	//printf("{%d - %d - %d}\n", ivar->key, ivar->equal, ivar->value);
 }
 
 int	 ft_len_extact_assign(char *str, t_list *lstassign)

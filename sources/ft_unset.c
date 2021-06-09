@@ -28,8 +28,7 @@ int ft_unset(t_btree *node, t_dico *dico)
 	{
 		if (!ft_isvalid_id(*argv))
 		{
-			ft_error(EUNSET, \
-				(const char *[]){"`",*argv ,"': not a valid identifier\n", NULL});
+			ft_error((const char *[]){_strerror(EEXPORT) ,"`",*argv ,"': not a valid identifier\n", NULL});
 			code_return = 1;
 		}
 		else

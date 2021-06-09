@@ -3,20 +3,32 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <term.h>
+#include <dirent.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <errno.h>
 #include <ctype.h>
+#include <termios.h>
+#include <string.h>
+#include <signal.h>
+#include <curses.h>
 #include "libft.h"
 
+# define CMD_FOUND_NX	126
+# define CMD_NFOUND		127
 # define ERROR			-1
 # define SUCCESS		0
+# define FAILURE		1
+# ifndef ELAST
+# define ELAST			0x1000
+# endif
 # define EPARSE			(ELAST + 1)
 # define EMULTI			(ELAST + 2)
 # define EEMPTY			(ELAST + 3)
 # define EEXPORT		(ELAST + 4)
 # define EUNSET			(ELAST + 5)
-# define NBFCT		7	
+# define NBFCT			7	
 
 /* >>> Lecture de la commande [TODO] */
 
@@ -44,10 +56,7 @@ typedef enum e_scope {
 	EXPORT,
 }			t_scope;
 
-typedef enum e_bool {
-	FALSE,
-	TRUE,
-}			t_bool;
+typedef _Bool t_bool;
 
 typedef enum e_side { 
 	ROOT,
@@ -98,7 +107,7 @@ typedef struct s_index_var
 }				t_index_var;
 
 /* >>> Gestion erreur */
-int		ft_error(int _errno, const char *msg[]);
+int		ft_error(const char *msg[]);
 void	parse_error(t_btree *node, char last);
 int		check_left(t_btree *node);
 int		check_right(t_btree *node);
@@ -115,6 +124,7 @@ void ft_show_dico(void *content);
 int	ft_set_dico_value(char *key, char *value, t_scope scope, t_dico *dico);
 int ft_set_dico(t_dico *dico, char **envp);
 int	ft_new_dico_var(char *key, char *value, t_scope scope, t_dico *dico);
+
 t_var *ft_str_to_var(char *str, int verify);
 t_var *ft_get_dico_var(char *key, t_dico *dico);
 int ft_show_envp(t_dico *dico, int declare, int fd);
@@ -131,6 +141,7 @@ int ft_cross(t_btree *root, t_dico *dico);
 
 /* preparer les pipes */
 void ft_pipes(t_btree *node);
+void	ft_cleanup_fd(t_btree *node);
 
 /* assignation */
 int ft_assign(t_btree *node, t_dico *dico);

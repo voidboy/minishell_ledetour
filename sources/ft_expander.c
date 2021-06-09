@@ -118,7 +118,7 @@ static void replace_expension(char **expanded, t_dico *dico)
 		if (is_expension(expanded[i], 0))
 		{
 			if (expanded[i][0] == '~') 
-				value = ft_get_dico_value("PWD", dico);
+				value = ft_get_dico_value("HOME", dico);
 			else 
 				value = ft_get_dico_value(expanded[i] + 1, dico);
 			//printf("VALUE EXP is %s\n", value);

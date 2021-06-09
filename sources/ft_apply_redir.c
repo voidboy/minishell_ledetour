@@ -15,7 +15,7 @@ static int update_fds(t_btree *node, t_way r, char *f)
 	fd = open(f, opts, 0644);
 	if (fd == -1)
 	{
-		ft_error(errno, NULL);
+		ft_error((const char *[]){_strerror(errno), NULL});
 		return (1);
 	}
 	if (r == OUT_OUT || r == OUT)
@@ -37,15 +37,34 @@ int ft_apply_redir(t_btree *node, t_dico *dico)
 {
 	t_list	*current;
 	t_redir *redir;
+	char	*filename;
 	int		exit_code;
 
-	exit_code = 0;
 	current = node->redir;
-	while (current && !exit_code)
+	exit_code = 0;
+	while (current)
 	{
 		redir = current->content;
-		redir->filename = ft_sanitize(ft_expander(redir->filename, dico));
+		if (redir->filename[0] == '$')
+		{
+			//printf("1> filename is {%s}\n", redir->filename);
+			/* protect this, need to free filename */
+			filename = strdup(redir->filename);
+			redir->filename = ft_expander(redir->filename, dico);
+			//printf("2> filename is {%s}\n", redir->filename);
+			if (!*redir->filename)
+			{
+				ft_error((const char *[]){_strerror(EEMPTY), filename, ": ambiguous redirect\n", NULL});
+				free(filename);
+				return (1);
+			}
+			redir->filename = ft_sanitize(redir->filename);
+		}
+		else 
+			redir->filename = ft_expander(redir->filename, dico);
 		exit_code = update_fds(node, redir->way, redir->filename);
+		if (exit_code)
+			return (exit_code);
 		current = current->next;
 	}
 	return (exit_code);

@@ -118,6 +118,7 @@ char *ft_sanitize(char *str)
 
 	if (!str)
 		return NULL;
+	//printf("str{%s}\n", str);
 	len = ft_len_sanitize(str);
 	newstr = malloc(sizeof(char) * (len + 1));
 	if (!newstr)
@@ -134,5 +135,6 @@ char *ft_sanitize(char *str)
 			newstr[len++] = str[i++];
 	}
 	free(str);
+	//printf("str{%s}\n", newstr);
 	return newstr;
 }

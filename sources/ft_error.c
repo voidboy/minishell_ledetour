@@ -28,19 +28,13 @@ static int	pick_error(t_type t)
 		" `newline'\n",
 	};
 
-	return (ft_error(EPARSE, (const char *[]){strs_error[t], NULL}));
+	return (ft_error((const char *[]){_strerror(EPARSE), strs_error[t], NULL}));
 }
 
-int	ft_error(int _errno, const char *msg[])
+int	ft_error(const char *msg[])
 {
 	int 	i;
-	char	*err_msg;
 
-	if (_errno > ELAST)
-		err_msg = _strerror(_errno);
-	else 
-		err_msg = strerror(_errno);
-	write(STDERR_FILENO, err_msg, ft_strlen(err_msg));
 	i = -1;
 	if (msg)
 		while (msg[++i])
@@ -58,7 +52,7 @@ void	parse_error(t_btree *node, char last)
 	{
 		error[0] = last;
 		error[1] = '\0';
-		ft_error(EPARSE, (const char *[]){" `", error, "'\n", NULL});
+		ft_error((const char *[]){_strerror(EPARSE), " `", error, "'\n", NULL});
 	}
 	else if (node->side == LEFT)
 		pick_error(node->parent->type);

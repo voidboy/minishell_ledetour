@@ -7,7 +7,6 @@ int ft_export(t_btree *node, t_dico *dico)
 	int		code_return;
 
 	code_return = 0;
-	printf("#### export\n");
 	argv = node->argv + 1;
 	if (!(*argv))
 		return (ft_show_envp(dico, 1, node->fd[1]));
@@ -33,8 +32,7 @@ int ft_export(t_btree *node, t_dico *dico)
 			}
 		}else
 		{
-			ft_error(EEXPORT, \
-					(const char *[]){"`",*argv ,"': not a valid identifier\n", NULL});
+			ft_error((const char *[]){_strerror(EEXPORT) ,"`",*argv ,"': not a valid identifier\n", NULL});
 			code_return = 1;
 		}
 		argv++;

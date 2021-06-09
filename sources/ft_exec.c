@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static void	ft_cleanup(t_btree *node)
+void	ft_cleanup_fd(t_btree *node)
 {
 	if (node->fd[0] != STDIN_FILENO)
 		close(node->fd[0]);
@@ -23,26 +23,25 @@ static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
 	{
 		dup2(node->fd[0], STDIN_FILENO);
 		dup2(node->fd[1], STDOUT_FILENO);
-		ft_cleanup(node);
-		printf("EXECV is %s\n", full_path);
+		ft_cleanup_fd(node);
+		//printf("EXECV is {%s}\n", full_path);
 		if (execve(full_path, node->argv, dico->envp) == -1)
 		{
-			exit_code = 126;
-			ft_error(errno, NULL);
+			ft_error((const char *[]){_strerror(errno), NULL});
+			exit(CMD_FOUND_NX);
 		}
 	}
 	else if (pid == -1)
 	{
 		exit_code = 1;
-		ft_error(errno, NULL);
+		ft_error((const char *[]){_strerror(errno), NULL});
 	}
-	free(full_path);
 	if (!exit_code)
-	{
 		wait(&exit_code);
-		return (WEXITSTATUS(exit_code));
-	}
-	return exit_code;
+	free(full_path);
+	/* where node is clean ? */
+	ft_cleanup_fd(node);
+	return (exit_code);
 }
 
 static char	ft_exec_cmd(t_btree *node, t_dico *dico)
@@ -56,13 +55,14 @@ static char	ft_exec_cmd(t_btree *node, t_dico *dico)
 	if (full_path)
 		exit_code = launch_cmd(full_path, node, dico);
 	else
-		exit_code = 127;
-	ft_cleanup(node);
+		exit_code = CMD_NFOUND;
+	ft_cleanup_fd(node);
 	return (exit_code);
 }
 
 static int	ft_exec_builtin(t_btree *node, t_dico *dico)
 {
+	int		code_return;
 	int		i;
 	char	**names;
 	void	**fcts;
@@ -78,7 +78,9 @@ static int	ft_exec_builtin(t_btree *node, t_dico *dico)
 	if (i < NBFCT)
 	{
 		ptr_fct = fcts[i];
-		return ptr_fct(node, dico);
+		code_return = ptr_fct(node, dico);
+		ft_cleanup_fd(node);
+		return (code_return);
 	}
 	return -1;
 }
@@ -88,10 +90,18 @@ int	ft_exec(t_btree *node, t_dico *dico)
 	int	code_return;
 
 	if (node->cmd == NULL)
+	{
+		ft_cleanup_fd(node);
 		return (0);
+	}
+	if (!*node->cmd)
+	{
+		ft_cleanup_fd(node);
+		ft_error((const char *[]){_strerror(EEMPTY), "", ": command not found\n", NULL});
+		return (CMD_NFOUND);
+	}
 	code_return = ft_exec_builtin(node, dico);
 	if (code_return < 0)
 		code_return = ft_exec_cmd(node, dico);
-	printf("CMD:{%s}R:%d\n", node->cmd, code_return);
 	return (code_return);
 }
