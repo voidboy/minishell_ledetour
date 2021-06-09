@@ -1,14 +1,17 @@
 #include "minishell.h"
 
-void ft_set_vars(t_var *vars, t_dico *dico, int nbvars)
+void ft_set_vars(t_btree *node, t_dico *dico, int code_return)
 {
-	int i;
+	char **argv;
+	int	i;
 
-	i= -1;
-	while (++i < nbvars)
-	{
-		ft_set_dico_value(vars[i].key, vars[i].value, vars[i].scope, dico);
-	}
+	ft_set_dico_value(ft_strdup("?"), ft_itoa(code_return), LOCAL, dico);
+	argv = node->argv;
+	i = -1;
+	while (argv && argv[++i])
+		;
+	if (argv && i > 0)
+		ft_set_dico_value(ft_strdup("_"), ft_strdup(argv[i-1]), GLOBAL, dico);
 }
 
 int ft_execute_node(t_btree *node, t_dico *dico)
@@ -28,17 +31,17 @@ int ft_cross(t_btree *root, t_dico *dico)
 	if (root)
 	{
 		code_return = ft_cross(root->left, dico);
-		ft_set_dico_value(ft_strdup("?"), ft_itoa(code_return), LOCAL, dico);
+		ft_set_vars(root, dico, code_return);
 		if (root->type == CMD)
 		{
 			code_return = ft_execute_node(root, dico);
-			ft_set_dico_value(ft_strdup("?"), ft_itoa(code_return), LOCAL, dico);
+			ft_set_vars(root, dico, code_return);
 		}
 		else if (!((root->type == OR && code_return == 0) \
 						|| (root->type == AND && code_return != 0 )))
 		{
 			code_return = ft_cross(root->right, dico);
-			ft_set_dico_value(ft_strdup("?"), ft_itoa(code_return), LOCAL, dico);
+			ft_set_vars(root, dico, code_return);
 		}
 	}
 	return code_return;

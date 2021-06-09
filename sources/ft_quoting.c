@@ -52,8 +52,7 @@ int	ft_backslash(char *str, int *i, char *newstr)
 	int len;
 
 	len = 0;
-
-	if (str[*i] && str[*i] == '\\')
+	while (str[*i] && str[*i] == '\\')
 	{
 		(*i)++;
 		if (str[*i])
@@ -80,6 +79,7 @@ int	ft_quoting(char *str, int *i, char *newstr)
 	save_i = -1;
 	while (save_i != *i && str && str[*i])
 	{
+//		printf("%s - ^%c^\n", newstr, str[*i]);
 		save_i = *i;
 		len += ft_backslash(str, i, newstr);
 		newstr += len * w;
@@ -124,8 +124,8 @@ char *ft_sanitize(char *str)
 	if (!newstr)
 		return NULL;
 	newstr[len] = 0;
-	//printf("len is {%d}\n", len);
-	//printf("argv is {%s}\n", str);
+//	printf("len is {%d}\n", len);
+//	printf("argv is {%s}\n", str);
 	len = 0;
 	i = 0;
 	while (str[i])
