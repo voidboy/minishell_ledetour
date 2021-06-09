@@ -27,7 +27,7 @@ static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
 		//printf("EXECV is {%s}\n", full_path);
 		if (execve(full_path, node->argv, dico->envp) == -1)
 		{
-			ft_error((const char *[]){_strerror(errno), NULL});
+			ft_error((const char *[]){_strerror(EEMPTY), full_path, ": ", _strerror(errno), "\n", NULL});
 			exit(CMD_FOUND_NX);
 		}
 	}
