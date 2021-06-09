@@ -1,0 +1,7 @@
+*.o
+*.swo
+*.swp
+minishell
+*.dSYM
+*.a
+a.out
