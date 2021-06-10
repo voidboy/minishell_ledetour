@@ -15,7 +15,7 @@ static int update_fds(t_btree *node, t_way r, char *f)
 	fd = open(f, opts, 0644);
 	if (fd == -1)
 	{
-		ft_error((const char *[]){_strerror(errno), NULL}, FALSE);
+		ft_error((const char *[]){_strerror(EEMPTY), f, ": ", _strerror(errno), "\n", NULL}, FALSE);
 		return (1);
 	}
 	if (r == OUT_OUT || r == OUT)

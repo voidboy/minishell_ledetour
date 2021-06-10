@@ -125,7 +125,6 @@ t_btree	*btree_new_node(char *cmd, t_btree *parent, t_side side, t_type op)
 	node->redir = NULL;
 	node->fd[0] = STDIN_FILENO;
 	node->fd[1] = STDOUT_FILENO;
-	node->piped = false;
 	return (node);
 }
 

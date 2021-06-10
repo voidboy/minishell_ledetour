@@ -37,6 +37,7 @@
 /* >>> Parser */
 typedef enum e_way { 
 	IN,
+	IN_IN,
 	OUT,
 	OUT_OUT,
 }			t_way;

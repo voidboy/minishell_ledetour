@@ -32,12 +32,11 @@ int main(int ac, char **argv, char **envp)
 	dico.sets = NULL;
 	dico.envp = NULL;
 	ft_set_dico(&dico, envp);
-	setvbuf(stdout, NULL, _IONBF, 0);
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, sigquit_handler);
 	while (1)
 	{
-		write(STDOUT_FILENO, "minishell> ", 11);
+		//write(STDOUT_FILENO, "minishell> ", 11);
 		get_next_line(STDIN_FILENO, &line);
 		//printf("\nline : %s\n\n", line);
 		root = ft_sow(line);
