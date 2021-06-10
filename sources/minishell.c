@@ -1,5 +1,4 @@
 #include "minishell.h"
-#include "gnl.h"
 
 t_minishell g_minishell;
 
@@ -23,7 +22,7 @@ int main(int ac, char **argv, char **envp)
 	char	*line;
 	t_btree	*root;
 	t_dico	dico;
-   
+   	int prove;
 	argv = (char *[]){"",
 			"var=1;' ' > $var",
 	//	" '    '1234\\ \" \"5\\ | hh \"&&\" || ds",
@@ -32,19 +31,21 @@ int main(int ac, char **argv, char **envp)
 	dico.sets = NULL;
 	dico.envp = NULL;
 	ft_set_dico(&dico, envp);
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, sigquit_handler);
+	//signal(SIGINT, sigint_handler);
+	//signal(SIGQUIT, sigquit_handler);
 	while (1)
 	{
-		//write(STDOUT_FILENO, "minishell> ", 11);
+		write(STDOUT_FILENO, "minishell> ", 11);
 		get_next_line(STDIN_FILENO, &line);
 		//printf("\nline : %s\n\n", line);
 		root = ft_sow(line);
-		//btree_show(root);
-		if (ft_prove(root) != -1)
+		btree_show(root);
+		prove = ft_prove(root);
+		ft_open_her_doc(root);
+		if ( prove != -1 )
 		{
 			ft_cross(root, &dico);
-			//btree_show(root);
+			btree_show(root);
 			//ft_lstiter(dico.sets, ft_show_dico);
 		}
 		btree_free(root);

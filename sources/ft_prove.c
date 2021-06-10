@@ -1,12 +1,26 @@
 #include "minishell.h"
+#include "gnl.h"
+
+
+static int ft_here_doc(t_btree *node, int start, int len)
+{
+	//printf("node cmd is %s - %d - %d\n", node->cmd + start, start, len);
+	node->delimiter = ft_substr(node->cmd, start, len);
+	if (!node->delimiter)
+		ft_error((const char *[]){_strerror(errno), NULL}, TRUE);
+	node->delimiter = ft_sanitize(node->delimiter);
+	//printf("del is [%s] : \n", delimiter);
+	return (0);
+}
 
 static size_t	consume_filename(t_btree *node, int *i)
 {
 	t_context	c;
 	size_t		consumed;
+	t_way		r;
 
 	init_context(&c);
-	trim_redir(node->cmd, i);
+	r = trim_redir(node->cmd, i);
 	consumed = 0;
 	while (node->cmd[*i])
 	{
@@ -21,6 +35,8 @@ static size_t	consume_filename(t_btree *node, int *i)
 		context_error();
 	else if (consumed == 0)
 		parse_error(node, node->cmd[*i]);
+	if (r == IN_IN && consumed)
+		ft_here_doc(node, *i - consumed, consumed);
 	return (consumed);
 }
 

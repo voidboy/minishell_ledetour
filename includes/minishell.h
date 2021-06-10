@@ -87,6 +87,8 @@ typedef struct s_btree {
 	char			*cmd;
 	char			**argv;
 	int				fd[2];
+	char			*buff;
+	char			*delimiter;
 }				t_btree;
 
 typedef struct s_var { 
@@ -143,6 +145,9 @@ t_btree *ft_sow(char *line);
 /* verification syntaxique, gestion des redirections, si necessaire affiche l'erreur */
 int ft_prove(t_btree *root);
 
+/* her doc */
+int ft_open_her_doc(t_btree *root);
+
 /* parcours des commandes, infix */
 int ft_cross(t_btree *root, t_dico *dico);
 
@@ -165,6 +170,9 @@ int	ft_exec(t_btree *node, t_dico *dico);
 
 /* sanitize */
 char *ft_sanitize(char *str);
+
+/* gnl */
+int	get_next_line(int fd, char **line);
 
 /* expension */
 char *ft_expander(char *str, t_dico *dico);
