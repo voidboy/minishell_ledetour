@@ -1,6 +1,6 @@
 #include "minishell.h" 
 
-# define LEVMAX 200
+# define LEVMAX 10000
 # define WMAX 255
 
 int _print_t(t_btree *tree, int is_left, int offset, int depth, char s[LEVMAX][WMAX])

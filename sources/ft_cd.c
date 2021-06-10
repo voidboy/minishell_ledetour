@@ -13,7 +13,7 @@ int ft_cd(t_btree *node, t_dico *dico)
 	if (chdir(path) == -1)
 	{
 		ft_error((const char *[]){_strerror(EEMPTY), "cd: ",
-			path, ": ", _strerror(errno), "\n", NULL});
+			path, ": ", _strerror(errno), "\n", NULL}, FALSE);
 		return (1);
 	}
 	else 

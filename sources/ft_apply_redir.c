@@ -15,7 +15,7 @@ static int update_fds(t_btree *node, t_way r, char *f)
 	fd = open(f, opts, 0644);
 	if (fd == -1)
 	{
-		ft_error((const char *[]){_strerror(errno), NULL});
+		ft_error((const char *[]){_strerror(errno), NULL}, FALSE);
 		return (1);
 	}
 	if (r == OUT_OUT || r == OUT)
@@ -54,7 +54,7 @@ int ft_apply_redir(t_btree *node, t_dico *dico)
 			//printf("2> filename is {%s}\n", redir->filename);
 			if (!*redir->filename)
 			{
-				ft_error((const char *[]){_strerror(EEMPTY), filename, ": ambiguous redirect\n", NULL});
+				ft_error((const char *[]){_strerror(EEMPTY), filename, ": ambiguous redirect\n", NULL}, FALSE);
 				free(filename);
 				return (1);
 			}

@@ -1,6 +1,8 @@
 #include "minishell.h"
 #include "gnl.h"
 
+t_minishell g_minishell;
+
 void sigint_handler(int n)
 {
 	if (n == SIGINT)

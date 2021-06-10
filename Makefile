@@ -29,9 +29,9 @@ SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_export.c \
 			sources/ft_unset.c \
 			sources/ft_env.c \
+			sources/minishell.c \
 			tests/btree_show.c \
 			tests/dico_show.c \
-			tests/toby.c
 
 OBJS	=	$(SRCS:.c=.o)
 

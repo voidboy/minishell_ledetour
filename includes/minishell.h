@@ -106,8 +106,14 @@ typedef struct s_index_var
 	int value;
 }				t_index_var;
 
+typedef struct s_minishell
+{
+	t_btree	*root;
+	t_dico	*dico;
+}				t_minishell;
+
 /* >>> Gestion erreur */
-int		ft_error(const char *msg[]);
+int		ft_error(const char *msg[], t_bool is_fatal);
 void	parse_error(t_btree *node, char last);
 int		check_left(t_btree *node);
 int		check_right(t_btree *node);
@@ -208,5 +214,7 @@ void	context_error(void);
 /* >>> tests */
 void btree_show(t_btree *root);
 void ft_printstrs(char **strs, const char *prefix);
+
+extern t_minishell g_minishell;
 
 #endif
