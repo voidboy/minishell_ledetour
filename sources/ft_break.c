@@ -65,9 +65,7 @@ char	**ft_break(char *str, char *charset)
 	size_tab = 0;
 	tab_str = malloc(sizeof(char *));
 	*tab_str = 0;
-	if (!str)
-		return tab_str;
-	while (*str)
+	while (str && *str)
 	{
 		pos_charset = ft_strstr(str, charset);
 		substr = ft_create_str(str, pos_charset);
@@ -76,8 +74,12 @@ char	**ft_break(char *str, char *charset)
 			tab_str = ft_add_str(tab_str, substr, size_tab);
 			size_tab++;
 			str = pos_charset + 1;
-		}else
+		}
+		else
+		{
+			free(substr);
 			str++;
+		}
 	}
 	return (tab_str);
 }

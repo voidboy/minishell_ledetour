@@ -128,7 +128,7 @@ char *ft_get_dico_value(char *key, t_dico *dico)
 	{
 		content = current->content;
 		if (!ft_strcmp(key, content->key))
-			return (content->value);
+			return (ft_strdup(content->value));
 		else 
 			current = current->next;
 	}

@@ -4,24 +4,27 @@ char *ft_cmdtrim(char *s)
 {
 	int		start;
 	int		end;
-	char	*set;
+	char	*tmp;
 	int		len;
 
-	set = " \t";
+	tmp = " \t";
 	len = ft_strlen(s); 
 	if (!len)
 		return (NULL);
 	start = 0;
 	end = len;
-	while (s[start] && ft_strchr(set, s[start]))
+	while (s[start] && ft_strchr(tmp, s[start]))
 		start++;
-	while (end > start && ft_strchr(set, s[end]))
+	while (end > start && ft_strchr(tmp, s[end]))
 		end--;
 	if (s[end] == '\\')
 		end++;
 	if (start == 0 && end == len - 1)
-		return (ft_strdup(s));
-	return (ft_substr(s, start, end - start + 1));
+		tmp = ft_strdup(s);
+	else
+		tmp = ft_substr(s, start, end - start + 1);
+	free(s);
+	return (tmp);
 }
 
 int	ft_find_last(char *hay, char *need)

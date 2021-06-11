@@ -72,10 +72,11 @@ static char	ft_exec_cmd(t_btree *node, t_dico *dico)
 {
 	char	*full_path;
 	int		exit_code;
+	char	*path;
 
-	(void)node;
-	(void)dico;
-	full_path = ft_search_path(node->argv[0], ft_get_dico_value("PATH", dico));
+	path = ft_get_dico_value("PATH", dico);
+	full_path = ft_search_path(node->argv[0], path);
+	free(path);
 	if (full_path)
 		exit_code = launch_cmd(full_path, node, dico);
 	else

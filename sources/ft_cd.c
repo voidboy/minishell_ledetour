@@ -39,19 +39,21 @@ int ft_cd(t_btree *node, t_dico *dico)
 			return (1);
 	}
 	else
-		path = node->argv[1];
+		path = ft_strdup(node->argv[1]);
 	if (chdir(path) == -1)
 	{
 		ft_error((const char *[]){_strerror(ECD),
 			path, ": ", _strerror(errno), "\n", NULL}, FALSE);
+		free(path);
 		return (1);
 	}
 	else 
 	{
 		oldpwd = ft_get_dico_value("PWD", dico);
 		//printf("OLD %s - PATH %s\n", oldpwd, path);
-		ft_set_dico_value(ft_strdup("OLDPWD"), ft_strdup(oldpwd), GLOBAL, dico);
+		ft_set_dico_value(ft_strdup("OLDPWD"), oldpwd, GLOBAL, dico);
 		ft_set_dico_value(ft_strdup("PWD"), getcwd(NULL, 0), GLOBAL, dico);
+		free(path);
 		return (0);
 	}
 }
