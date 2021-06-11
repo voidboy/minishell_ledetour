@@ -32,6 +32,7 @@
 # define ECD			(ELAST + 6)
 # define EEXIT			(ELAST + 7)
 # define EECHO			(ELAST + 8)
+# define EPWD			(ELAST + 9)
 # define NBFCT			7	
 
 /* >>> Lecture de la commande [TODO] */

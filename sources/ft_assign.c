@@ -1,5 +1,24 @@
 #include "minishell.h"
 
+void ft_free_lstassign(void *ivar)
+{
+	free(ivar);
+}
+
+int ft_free_vars(t_var *var, int len, int r)
+{
+	int i;
+
+	i = -1;
+	while (r && ++i < len)
+	{
+		free(var[i].key);
+		free(var[i].value);
+	}
+	free(var);
+	return 0;
+}
+
 int	ft_get_varkey(char *str, int i)
 {
 	while (--i >= 0 && str[i] != ' ' && str[i] != '\t')
@@ -37,6 +56,11 @@ void	ft_find_assign(char *str, t_list **lstassign, int index)
 	if (str[index] == '=')
 	{
 		ivar = malloc(sizeof(t_index_var) * 1);
+		if (!ivar)
+		{
+			ft_lstclear(lstassign, ft_free_lstassign);
+			ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
+		}
 		ivar->equal = index;
 		ivar->key = ft_get_varkey(str, index);
 		if (ivar->key >= 0)
@@ -51,15 +75,6 @@ void	ft_find_assign(char *str, t_list **lstassign, int index)
 			return ;
 		}
 	}
-}
-
-void ft_show_lstassign(void *content)
-{
-
-	t_index_var *ivar;
-
-	ivar = content;
-	//printf("{%d - %d - %d}\n", ivar->key, ivar->equal, ivar->value);
 }
 
 int	 ft_len_extact_assign(char *str, t_list *lstassign)
@@ -87,6 +102,11 @@ int	ft_extract_assign(t_btree *node, t_list *lstassign, t_var *vars)
 
 	len = ft_len_extact_assign(node->cmd, lstassign);
 	newstr = malloc(sizeof(char) * len + 1);
+	if (!newstr)
+	{
+		ft_lstclear(&lstassign, ft_free_lstassign);
+		ft_free_vars(vars, len, !(node->cmd == NULL));
+	}
 	newstr[len] = 0;
 	i = 0;
 	j = 0;
@@ -109,11 +129,6 @@ int	ft_extract_assign(t_btree *node, t_list *lstassign, t_var *vars)
 	return 0;
 }
 
-void ft_free_lstassign(void *ivar)
-{
-	free(ivar);
-}
-
 int	ft_apply_assign(t_var *vars,t_dico *dico, int nbvars)
 {
 	int i;
@@ -121,20 +136,6 @@ int	ft_apply_assign(t_var *vars,t_dico *dico, int nbvars)
 	i = -1;
 	while (++i < nbvars)
 		ft_set_dico_value(vars[i].key, ft_sanitize(ft_expander(vars[i].value, dico)), LOCAL, dico);
-	return 0;
-}
-
-int ft_free_vars(t_var *var, int len, int r)
-{
-	int i;
-
-	i = -1;
-	while (r && ++i < len)
-	{
-		free(var[i].key);
-		free(var[i].value);
-	}
-	free(var);
 	return 0;
 }
 
@@ -150,18 +151,19 @@ int ft_assign(t_btree *node, t_dico *dico)
 	ft_find_assign(node->cmd, &lstassign, 0);
 	len = ft_lstsize(lstassign);
 	vars = malloc(sizeof(t_var) * len);
+	if (!vars)
+	{
+		ft_lstclear(&lstassign, ft_free_lstassign);
+		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
+	}
 	ft_extract_assign(node, lstassign, vars);
 	node->cmd = ft_expander(node->cmd, dico);
 	node->argv = ft_break(node->cmd, " \t\n"); 
 	i= -1;
 	while (node->argv[++i])
-	{
 		node->argv[i] = ft_sanitize(node->argv[i]);
-		//printf("%s\n", node->argv[i]);
-	}
 	free(node->cmd);
 	node->cmd = ft_strdup(node->argv[0]);
-	ft_lstiter(lstassign, ft_show_lstassign);
 	ft_lstclear(&lstassign, ft_free_lstassign);
 	if (node->cmd == NULL)
 		ft_apply_assign(vars, dico, len);

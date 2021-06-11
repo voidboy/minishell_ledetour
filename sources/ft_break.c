@@ -24,6 +24,8 @@ char	**ft_add_str(char **tab_str, char *str, int size_tab)
 	char	**new_tab;
 
 	new_tab = malloc((size_tab + 2) * sizeof(char *));
+	if (!new_tab)
+		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
 	i = 0;
 	while (i < size_tab)
 	{
@@ -45,6 +47,8 @@ char	*ft_create_str(char *start, char *end)
 	i = 0;
 	size = end - start + 1;
 	str = malloc((size + 1) * sizeof(char));
+	if (!str)
+		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
 	while (start <= end)
 	{
 		str[i] = *start;
@@ -64,6 +68,8 @@ char	**ft_break(char *str, char *charset)
 
 	size_tab = 0;
 	tab_str = malloc(sizeof(char *));
+	if (!tab_str)
+		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
 	*tab_str = 0;
 	while (str && *str)
 	{

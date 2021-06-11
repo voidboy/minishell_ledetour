@@ -136,11 +136,11 @@ t_btree	*btree_new_node(char *cmd, t_btree *parent, t_side side, t_type op)
 t_btree *ft_wrap_sow(char *line, t_btree *parent, t_side side)
 {
 	char	*strs[3];
-	t_btree *root;
-	t_type op;
+	t_btree	*root;
+	t_type	op;
 
 	if (!line)
-		return NULL;
+		return (NULL);
 	op = ft_split_op(line, &strs[0], &strs[1], &strs[2]);
 	if (op != CMD)
 	{

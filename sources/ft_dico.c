@@ -91,6 +91,8 @@ int	ft_new_dico_var(char *key, char *value, t_scope scope, t_dico *dico)
 	t_var	*var;
 
 	var = malloc(sizeof(t_var));
+	if (!var)
+		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
 	var->key = key;
 	var->value = value;
 	var->scope = scope;
@@ -152,6 +154,8 @@ t_var *ft_str_to_var(char *str, int verify)
 		}
 	}
 	var = malloc(sizeof(t_var));
+	if (!var)
+		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
 	var->key = ft_substr(str, 0, i);
 	var->value = ft_substr(str, i + 1, ft_strlen(str) - i);
 	var->scope = GLOBAL;
@@ -169,6 +173,8 @@ int	ft_set_envp(t_dico *dico)
 	ft_free_strs(dico->envp);
 	len = ft_lstsize(sets);
 	dico->envp = malloc(sizeof(char *) * (len + 1));
+	if (!dico->envp)
+		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
 	dico->envp[len] = NULL;
 	len = -1;
 	while (sets)

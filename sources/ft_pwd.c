@@ -7,7 +7,7 @@ int ft_pwd(t_btree *node, t_dico *dico)
 	(void)dico;
 	if (getcwd(cwd, __DARWIN_MAXNAMLEN) == NULL)
 	{
-		ft_error((const char *[]){_strerror(errno), "\n",NULL}, FALSE);
+		ft_error((const char *[]){_strerror(EPWD),_strerror(errno), "\n",NULL}, FALSE);
 		return (1);
 	}
 	else 
