@@ -1,6 +1,4 @@
 #include "minishell.h"
-#include "gnl.h"
-
 
 static int ft_here_doc(t_btree *node, int start, int len)
 {
@@ -75,12 +73,17 @@ static int	check_node(t_btree *node)
 		return (SUCCESS);
 	else 
 	{
-		if (node->type == SEMICOLON)
-			return (check_left(node));
-		else
-			if (check_left(node) == ERROR || check_right(node) == ERROR)
+		if (node->type == SEMICOLON && !node->parent)
+		{
+			if (check_left(node) == ERROR)
 				return (ERROR);
-		return (SUCCESS);
+			else
+				return (SUCCESS);
+		}
+		else if (check_left(node) == ERROR || check_right(node) == ERROR)
+			return (ERROR);
+		else 
+			return (SUCCESS);
 	}
 }
 
