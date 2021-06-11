@@ -155,7 +155,10 @@ int ft_assign(t_btree *node, t_dico *dico)
 	node->argv = ft_break(node->cmd, " \t\n"); 
 	i= -1;
 	while (node->argv[++i])
+	{
 		node->argv[i] = ft_sanitize(node->argv[i]);
+		//printf("%s\n", node->argv[i]);
+	}
 	free(node->cmd);
 	node->cmd = ft_strdup(node->argv[0]);
 	ft_lstiter(lstassign, ft_show_lstassign);

@@ -19,7 +19,12 @@ static t_bool is_expension(char *str, int i)
 	return (FALSE);
 }
 
-
+void dollar_exception(char *src, int *i, t_context c)
+{
+	if (is_context_free(c))
+		if (src[*i] == '$' && (src[*i + 1] == '\'' || src[*i + 1] == '"'))
+			(*i)++;
+}
 
 static int count_expension(char *str)
 {
@@ -64,9 +69,7 @@ static void find_next_word(char *dst, char *src, int *i)
 		e = FALSE;
 	while (src[*i])
 	{
-		if (src[*i] == '$' 
-			&& (src[*i + 1] == '\'' || src[*i + 1] == '"'))
-			(*i)++;
+		dollar_exception(src, i, c);
 		if (e && j == 1 && !(src[*i] == '_'|| ft_isalpha(src[*i])))
 			break ;
 		else if (e && j && !(src[*i] == '_'|| ft_isalnum(src[*i])))
@@ -144,14 +147,14 @@ char *ft_expander(char *str, t_dico *vars)
 	if (!str)
 		return (NULL);
 	expension_counter = count_expension(str);
-	//printf("There are %d bloc(s)\n", expension_counter);
+//	printf("There are %d bloc(s)\n", expension_counter);
 	expanded = split_on_expension(str, expension_counter);
 	replace_expension(expanded, vars);
 	str_expanded = NULL;
 	i = 0;
 	while (expension_counter--)
 	{
-		//printf("1 STR EXPANDED IS %s\n", str_expanded);
+		//printf("EXPANDED IS %s\n", *expanded);
 		cpy_expanded = str_expanded;
 		str_expanded = ft_strjoin(str_expanded, expanded[i]);
 		//printf("2 STR EXPANDED IS %s\n", str_expanded);
