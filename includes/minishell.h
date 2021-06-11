@@ -28,6 +28,9 @@
 # define EEMPTY			(ELAST + 3)
 # define EEXPORT		(ELAST + 4)
 # define EUNSET			(ELAST + 5)
+# define ECD			(ELAST + 6)
+# define EEXIT			(ELAST + 7)
+# define EECHO			(ELAST + 8)
 # define NBFCT			7	
 
 /* >>> Lecture de la commande [TODO] */

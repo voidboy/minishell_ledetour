@@ -14,6 +14,9 @@ char	*_strerror(int _errno)
 		"minishell: ",
 		"minishell: export: ",
 		"minishell: unset: ",
+		"minishell: cd: ",
+		"minishell: exit: ",
+		"minishell: echo: ",
 	};
 
 	if (_errno > ELAST)
