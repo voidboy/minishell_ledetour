@@ -115,12 +115,17 @@ typedef struct s_minishell
 	t_dico	*dico;
 }				t_minishell;
 
+typedef const char *t_strs[];
+
 /* >>> Gestion erreur */
 int		ft_error(const char *msg[], t_bool is_fatal);
 void	parse_error(t_btree *node, char last);
 int		check_left(t_btree *node);
 int		check_right(t_btree *node);
 char	*_strerror(int _errno);
+int		ft_free_strs(char **strs);
+void	ft_free_node(void *_node);
+void	ft_free(t_btree *root, t_dico *dico);
 
 /* >>> Parsing */
 t_way trim_redir(char *cmd, int *i);
@@ -133,11 +138,11 @@ void ft_show_dico(void *content);
 int	ft_set_dico_value(char *key, char *value, t_scope scope, t_dico *dico);
 int ft_set_dico(t_dico *dico, char **envp);
 int	ft_new_dico_var(char *key, char *value, t_scope scope, t_dico *dico);
-
 t_var *ft_str_to_var(char *str, int verify);
 t_var *ft_get_dico_var(char *key, t_dico *dico);
 int ft_show_envp(t_dico *dico, int declare, int fd);
 int	ft_rm_dico_var(char *key, t_dico *dico);
+int	ft_set_envp(t_dico *dico);
 
 /* construction de l'arbre d'execution */
 t_btree *ft_sow(char *line);
@@ -208,6 +213,7 @@ int ft_exit(t_btree *node, t_dico dico);
 
 /* >>> btree library */
 void btree_apply_infix(t_btree *root, void (*applyf)(void *));
+void btree_apply_suffix(t_btree *root, void (*applyf)(void *));
 void btree_free(t_btree *root);
 int	btree_level_count(t_btree *root);
 void btree_free(t_btree *root);

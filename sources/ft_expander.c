@@ -138,6 +138,7 @@ char *ft_expander(char *str, t_dico *vars)
 	char	*cpy_expanded;
 	char	**expanded;
 	int		expension_counter;
+	int		i;
 
 	//printf("STR is %s", str);
 	if (!str)
@@ -147,17 +148,19 @@ char *ft_expander(char *str, t_dico *vars)
 	expanded = split_on_expension(str, expension_counter);
 	replace_expension(expanded, vars);
 	str_expanded = NULL;
+	i = 0;
 	while (expension_counter--)
 	{
 		//printf("1 STR EXPANDED IS %s\n", str_expanded);
 		cpy_expanded = str_expanded;
-		str_expanded = ft_strjoin(str_expanded, *expanded);
+		str_expanded = ft_strjoin(str_expanded, expanded[i]);
 		//printf("2 STR EXPANDED IS %s\n", str_expanded);
-		//free(*expanded);
-		//free(cpy_expanded);
-		expanded++;
+		free(expanded[i]);
+		free(cpy_expanded);
+		i++;
 	}
 	//printf("STR is %s\n", str_expanded);
 	free(str);
+	free(expanded);
 	return (str_expanded);
 }

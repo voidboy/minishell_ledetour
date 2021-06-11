@@ -77,11 +77,17 @@ int ft_redir(t_btree *node)
 		}
 	}
 	cmd_wo_redir[j] = '\0';
-	free(node->cmd);
-	node->cmd = cmd_wo_redir;
 	//printf("node->cmd is %s\n", node->cmd);
 	if (node->cmd[i] != '\0')
+	{
+		free(node->cmd);
+		node->cmd = cmd_wo_redir;
 		return (ERROR);
-	else 
+	}
+	else
+	 {	
+		free(node->cmd);
+		node->cmd = cmd_wo_redir;
 		return (SUCCESS);
+	}
 }

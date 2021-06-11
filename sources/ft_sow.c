@@ -110,7 +110,7 @@ t_btree	*btree_new_node(char *cmd, t_btree *parent, t_side side, t_type op)
 
 	node = (t_btree *)malloc(sizeof(t_btree));
 	if (!node)
-		return NULL;
+		ft_error((t_strs){_strerror(errno), NULL}, 1);
 	node->cmd = cmd;
 	node->parent = parent;
 	node->left = 0;
@@ -153,5 +153,6 @@ t_btree *ft_wrap_sow(char *line, t_btree *parent, t_side side)
 
 t_btree *ft_sow(char *line)
 {
-	return (ft_wrap_sow(line, NULL, ROOT));
+	g_minishell.root = ft_wrap_sow(line, NULL, ROOT);
+	return (g_minishell.root);
 }

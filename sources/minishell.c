@@ -30,6 +30,7 @@ int main(int ac, char **argv, char **envp)
 		NULL};
 	dico.sets = NULL;
 	dico.envp = NULL;
+	root = NULL;
 	ft_set_dico(&dico, envp);
 	//signal(SIGINT, sigint_handler);
 	//signal(SIGQUIT, sigquit_handler);
@@ -39,15 +40,16 @@ int main(int ac, char **argv, char **envp)
 		get_next_line(STDIN_FILENO, &line);
 		//printf("\nline : %s\n\n", line);
 		root = ft_sow(line);
-		btree_show(root);
+		//btree_show(root);
 		prove = ft_prove(root);
 		ft_open_her_doc(root);
 		if ( prove != -1 )
 		{
 			ft_cross(root, &dico);
-			btree_show(root);
+			//btree_show(root);
 			//ft_lstiter(dico.sets, ft_show_dico);
 		}
-		btree_free(root);
+		btree_apply_suffix(root, ft_free_node);
+		root = NULL;
 	}
 }

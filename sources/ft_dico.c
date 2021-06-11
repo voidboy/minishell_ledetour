@@ -113,6 +113,8 @@ int	ft_set_dico_value(char *key, char *value, t_scope scope, t_dico *dico)
 	}
 	else
 		ft_new_dico_var(key, value, scope, dico);
+	if (scope == GLOBAL)
+		ft_set_envp(dico);
 	return 0;
 }
 
@@ -156,17 +158,6 @@ t_var *ft_str_to_var(char *str, int verify)
 	return (var);
 }
 
-int ft_free_strs(char **strs)
-{
-	int i;
-
-	i = -1;
-	while (strs && strs[++i])
-		free(strs[i]);
-	free(strs);
-	return 0;
-}
-
 int	ft_set_envp(t_dico *dico)
 {
 	t_list	*sets;
@@ -200,9 +191,11 @@ int ft_set_dico(t_dico *dico, char **envp)
 	{
 		var = ft_str_to_var(*envp, 0);
 		ft_new_dico_var(var->key, var->value, var->scope, dico);
+		free(var);
 		envp++;
 	}
 	ft_set_envp(dico);
 	ft_new_dico_var(ft_strdup("?"), ft_strdup("0"), LOCAL,dico);
+	g_minishell.dico = dico;
 	return 0;
 }

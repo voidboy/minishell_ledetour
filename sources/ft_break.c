@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-/*
-#include <stdio.h>
-#include <stdlib.h>
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
-
-	len = 0;
-	while (s && s[len])
-		len++;
-	return (len);
-}
-*/
-
 char	*ft_strstr(char *str, char *to_find)
 {
 	int i;
@@ -37,17 +23,17 @@ char	**ft_add_str(char **tab_str, char *str, int size_tab)
 	int		i;
 	char	**new_tab;
 
-	if (!(*str))
-		return (tab_str);
 	new_tab = malloc((size_tab + 2) * sizeof(char *));
 	i = 0;
 	while (i < size_tab)
 	{
 		new_tab[i] = tab_str[i];
+		free(tab_str[i]);
 		i++;
 	}
 	new_tab[i] = str;
 	new_tab[i + 1] = 0;
+	free(tab_str);
 	return (new_tab);
 }
 
@@ -59,6 +45,8 @@ char	*ft_create_str(char *start, char *end)
 
 	i = 0;
 	size = end - start + 1;
+	if (!size)
+		return NULL;
 	str = malloc((size + 1) * sizeof(char));
 	while (start <= end)
 	{
@@ -86,8 +74,7 @@ char	**ft_break(char *str, char *charset)
 	{
 		pos_charset = ft_strstr(str, charset);
 		substr = ft_create_str(str, pos_charset);
-		//printf("%s\n", substr);
-		if (*substr)
+		if (substr)
 		{
 			tab_str = ft_add_str(tab_str, substr, size_tab);
 			size_tab++;
@@ -97,17 +84,3 @@ char	**ft_break(char *str, char *charset)
 	}
 	return (tab_str);
 }
-
-/*
-int main(void)
-{
-	char **strs;
-	
-	strs = ft_break("ls|ds"," \t\n");
-	while (*strs)
-	{
-		printf("{%s}\n",*strs);
-		strs++;
-	}
-
-}*/
