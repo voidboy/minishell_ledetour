@@ -22,6 +22,7 @@ int main(int ac, char **argv, char **envp)
 	t_btree	*root;
 	t_dico	dico;
    	int		prove;
+	int		r;
 	struct termios conf;
 
 	argv = (char *[]){"",
@@ -34,6 +35,7 @@ int main(int ac, char **argv, char **envp)
 	ft_set_dico(&dico, envp);
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, sigquit_handler);
+	r = 0;
 	while (1)
 	{
 		/* Hide controls caracters */
@@ -41,13 +43,14 @@ int main(int ac, char **argv, char **envp)
 		conf.c_lflag &= ~(ECHOCTL);
 		ioctl(ttyslot(), TIOCSETA, &conf);
 
-		write(STDOUT_FILENO, "minishell> ", 11);
+		if (!(WTERMSIG(r) == SIGINT))
+			write(STDOUT_FILENO, "minishell> ", 11);
 		get_next_line(STDIN_FILENO, &line);
 		if (!ft_strlen(line))
 		{
 			/* we should free here */
 			write(STDOUT_FILENO, "exit\n", 5);
-			exit(0);
+			exit(r);
 		}
 		//printf("\nline : %s\n\n", line);
 		root = ft_sow(line);
@@ -56,7 +59,7 @@ int main(int ac, char **argv, char **envp)
 		ft_open_her_doc(root);
 		if ( prove != -1 )
 		{
-			ft_cross(root, &dico);
+			r = ft_cross(root, &dico);
 			//btree_show(root);
 			//ft_lstiter(dico.sets, ft_show_dico);
 		}
