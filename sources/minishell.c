@@ -1,19 +1,18 @@
 #include "minishell.h"
+#include "termios.h"
+#include "sys/ioctl.h"
 
 t_minishell g_minishell;
 
-void sigint_handler(int n)
-{
-	if (n == SIGINT)
-		write(STDOUT_FILENO, "\nminigshell> ", 12);
-	else
-		;
-}
-
-void sigquit_handler(int n)
+static void sigint_handler(int n)
 {
 	(void)n;
-	;
+	write(STDOUT_FILENO, "\nminishell> ", 12);
+}
+
+static void sigquit_handler(int n)
+{
+	(void)n;
 }
 
 int main(int ac, char **argv, char **envp)
@@ -22,7 +21,9 @@ int main(int ac, char **argv, char **envp)
 	char	*line;
 	t_btree	*root;
 	t_dico	dico;
-   	int prove;
+   	int		prove;
+	struct termios conf;
+
 	argv = (char *[]){"",
 			"var=1;' ' > $var",
 	//	" '    '1234\\ \" \"5\\ | hh \"&&\" || ds",
@@ -31,12 +32,23 @@ int main(int ac, char **argv, char **envp)
 	dico.sets = NULL;
 	dico.envp = NULL;
 	ft_set_dico(&dico, envp);
-	//signal(SIGINT, sigint_handler);
-	//signal(SIGQUIT, sigquit_handler);
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, sigquit_handler);
 	while (1)
 	{
+		/* Hide controls caracters */
+		ioctl(ttyslot(), TIOCGETA, &conf);
+		conf.c_lflag &= ~(ECHOCTL);
+		ioctl(ttyslot(), TIOCSETA, &conf);
+
 		write(STDOUT_FILENO, "minishell> ", 11);
 		get_next_line(STDIN_FILENO, &line);
+		if (!ft_strlen(line))
+		{
+			/* we should free here */
+			write(STDOUT_FILENO, "exit\n", 5);
+			exit(0);
+		}
 		//printf("\nline : %s\n\n", line);
 		root = ft_sow(line);
 		//btree_show(root);

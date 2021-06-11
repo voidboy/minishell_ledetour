@@ -49,7 +49,7 @@ int ft_cd(t_btree *node, t_dico *dico)
 	else 
 	{
 		oldpwd = ft_get_dico_value("PWD", dico);
-		printf("OLD %s - PATH %s\n", oldpwd, path);
+		//printf("OLD %s - PATH %s\n", oldpwd, path);
 		ft_set_dico_value(ft_strdup("OLDPWD"), ft_strdup(oldpwd), GLOBAL, dico);
 		ft_set_dico_value(ft_strdup("PWD"), getcwd(NULL, 0), GLOBAL, dico);
 		return (0);

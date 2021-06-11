@@ -13,10 +13,12 @@
 #include <string.h>
 #include <signal.h>
 #include <curses.h>
+#include <sys/ioctl.h>
 #include "libft.h"
 
 # define CMD_FOUND_NX	126
 # define CMD_NFOUND		127
+# define SIG_TERM_NUM	128
 # define ERROR			-1
 # define SUCCESS		0
 # define FAILURE		1

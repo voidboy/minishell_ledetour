@@ -23,11 +23,17 @@ static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
 {
 	pid_t	pid;
 	int		exit_code;
+	struct termios conf;
 
 	pid = fork();
 	exit_code = 0;
 	if (pid == 0)
 	{
+		/* Restore controls caracters */
+		ioctl(ttyslot(), TIOCGETA, &conf);
+		conf.c_lflag |= ECHOCTL;
+		ioctl(ttyslot(), TIOCSETA, &conf);
+
 		dup2(node->fd[0], STDIN_FILENO);
 		dup2(node->fd[1], STDOUT_FILENO);
 		ft_cleanup_fd(node);
@@ -45,7 +51,17 @@ static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
 		ft_error((const char *[]){_strerror(errno), NULL}, TRUE);
 	}
 	if (!exit_code)
+	{
 		wait(&exit_code);
+		if (WIFSIGNALED(exit_code))
+		{
+			if (WTERMSIG(exit_code) == SIGQUIT)
+				write(STDERR_FILENO, "Quit: 3\n", 8);
+			exit_code = SIG_TERM_NUM + WTERMSIG(exit_code);
+		}
+		else 
+			exit_code = WEXITSTATUS(exit_code);
+	}
 	free(full_path);
 	/* where node is clean ? */
 	ft_cleanup_fd(node);
