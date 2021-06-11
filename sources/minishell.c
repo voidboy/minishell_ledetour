@@ -46,14 +46,14 @@ int main(int ac, char **argv, char **envp)
 
 		if (!(WTERMSIG(r) == SIGINT))
 			write(STDOUT_FILENO, "minishell> ", 11);
-		get_next_line(STDIN_FILENO, &line);
+		gnl(STDIN_FILENO, &line);
+		//printf("\nline : %s\n\n", line);
 		if (!ft_strlen(line))
 		{
 			/* we should free here */
 			write(STDOUT_FILENO, "exit\n", 5);
 			exit(r);
 		}
-		//printf("\nline : %s\n\n", line);
 		root = ft_sow(line);
 		//btree_show(root);
 		prove = ft_prove(root);

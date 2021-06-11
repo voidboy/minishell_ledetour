@@ -183,6 +183,7 @@ char *ft_sanitize(char *str);
 
 /* gnl */
 int	get_next_line(int fd, char **line);
+int	gnl(int fd, char **line);
 
 /* expension */
 char *ft_expander(char *str, t_dico *dico);

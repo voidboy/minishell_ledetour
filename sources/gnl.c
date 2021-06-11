@@ -54,3 +54,31 @@ int	get_next_line(int fd, char **line)
 	}
 	return (r);
 }
+
+int	gnl(int fd, char **line)
+{
+	char	c;
+	int		r;
+	int		size;
+	char	cc;
+
+	size = 0;
+	*line = malloc(sizeof(char));
+	if (*line == NULL)
+		return (-1);
+	**line = 0;
+	c = 0;
+	r = 1;
+	while (1)
+	{
+		cc = c;
+		r = read(fd, &c, 1);
+		if (r < 0)
+			return (-1);
+		if (r != 0)
+			r = ft_add(line, size++, c);
+		if (c =='\n' || (!size && r == 0))
+			break;
+	}
+	return (r);
+}
