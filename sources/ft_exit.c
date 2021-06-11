@@ -7,7 +7,7 @@ int ft_exit(t_btree *node, t_dico dico)
 	(void)dico;
 	if (node->argv[1] && node->argv[2])
 	{
-		ft_error((const char *[]){_strerror(EEMPTY), "exit: too many arguments\n", NULL});
+		ft_error((const char *[]){_strerror(EEMPTY), "exit: too many arguments\n", NULL}, FALSE);
 		return (1);
 	}
 	else if (node->fd[0] == STDIN_FILENO && node->fd[1] == STDOUT_FILENO)
@@ -16,13 +16,14 @@ int ft_exit(t_btree *node, t_dico dico)
 		write(node->fd[1], "exit\n", 5);
 		if (!node->argv[1])
 			exit(0);
-		while (ft_isdigit(node->argv[1][i]))
+		while ((!i && (node->argv[1][i] == '-' || node->argv[1][i] == '+'))
+			|| ft_isdigit(node->argv[1][i]))
 			i++;
 		if (node->argv[1][i] == '\0')
 			exit(ft_atoi(node->argv[1]));
 		else 
 			ft_error((const char *[]){_strerror(EEMPTY), "exit: ", node->argv[1],
-				": numeric argument required\n", NULL});
+				": numeric argument required\n", NULL}, FALSE);
 	}
 	return (0);
 }

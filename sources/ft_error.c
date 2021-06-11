@@ -1,5 +1,10 @@
 #include "minishell.h"
 
+void	ft_free(void)
+{
+	;
+}
+
 char	*_strerror(int _errno)
 {
 	static char	*strs_error[] = {
@@ -28,10 +33,10 @@ static int	pick_error(t_type t)
 		" `newline'\n",
 	};
 
-	return (ft_error((const char *[]){_strerror(EPARSE), strs_error[t], NULL}));
+	return (ft_error((const char *[]){_strerror(EPARSE), strs_error[t], NULL}, FALSE));
 }
 
-int	ft_error(const char *msg[])
+int	ft_error(const char *msg[], t_bool is_fatal)
 {
 	int 	i;
 
@@ -39,7 +44,13 @@ int	ft_error(const char *msg[])
 	if (msg)
 		while (msg[++i])
 			write(STDERR_FILENO, msg[i], ft_strlen(msg[i]));
-	return (ERROR);
+	if (is_fatal)
+	{
+		ft_free();
+		exit(EXIT_FAILURE);
+	}
+	else 
+		return (ERROR);
 }
 
 void	parse_error(t_btree *node, char last)
@@ -52,7 +63,7 @@ void	parse_error(t_btree *node, char last)
 	{
 		error[0] = last;
 		error[1] = '\0';
-		ft_error((const char *[]){_strerror(EPARSE), " `", error, "'\n", NULL});
+		ft_error((const char *[]){_strerror(EPARSE), " `", error, "'\n", NULL}, FALSE);
 	}
 	else if (node->side == LEFT)
 		pick_error(node->parent->type);

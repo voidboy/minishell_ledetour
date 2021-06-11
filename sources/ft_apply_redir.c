@@ -15,7 +15,7 @@ static int update_fds(t_btree *node, t_way r, char *f)
 	fd = open(f, opts, 0644);
 	if (fd == -1)
 	{
-		ft_error((const char *[]){_strerror(errno), NULL});
+		ft_error((const char *[]){_strerror(EEMPTY), f, ": ", _strerror(errno), "\n", NULL}, FALSE);
 		return (1);
 	}
 	if (r == OUT_OUT || r == OUT)
@@ -31,6 +31,19 @@ static int update_fds(t_btree *node, t_way r, char *f)
 		node->fd[0] = fd;
 	}
 	return (SUCCESS);
+}
+
+int ft_apply_here_doc(t_btree *node, t_dico *dico)
+{
+	int fd[2];
+
+	pipe(fd);
+
+	node->buff = ft_expander(node->buff, dico);
+	write(fd[1], node->buff, ft_strlen(node->buff));
+	node->fd[0] = fd[0];
+	close(fd[1]);
+	return (0);
 }
 
 int ft_apply_redir(t_btree *node, t_dico *dico)
@@ -54,7 +67,7 @@ int ft_apply_redir(t_btree *node, t_dico *dico)
 			//printf("2> filename is {%s}\n", redir->filename);
 			if (!*redir->filename)
 			{
-				ft_error((const char *[]){_strerror(EEMPTY), filename, ": ambiguous redirect\n", NULL});
+				ft_error((const char *[]){_strerror(EEMPTY), filename, ": ambiguous redirect\n", NULL}, FALSE);
 				free(filename);
 				return (1);
 			}
@@ -62,7 +75,10 @@ int ft_apply_redir(t_btree *node, t_dico *dico)
 		}
 		else 
 			redir->filename = ft_expander(redir->filename, dico);
-		exit_code = update_fds(node, redir->way, redir->filename);
+		if (redir->way == IN_IN)
+			exit_code = ft_apply_here_doc(node, dico);
+		else 
+			exit_code = update_fds(node, redir->way, redir->filename);
 		if (exit_code)
 			return (exit_code);
 		current = current->next;

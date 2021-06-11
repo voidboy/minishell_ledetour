@@ -14,6 +14,11 @@ t_way	trim_redir(char *cmd, int *i)
 		*i = *i + 1;
 		redirT = OUT;
 	}
+	else if (cmd[*i] == '<' && cmd[*i + 1] == '<')
+	{
+		*i = *i + 2;
+		redirT = IN_IN;
+	}
 	else if (cmd[*i] == '<')
 	{
 		*i = *i + 1;

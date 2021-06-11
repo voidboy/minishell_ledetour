@@ -20,7 +20,7 @@ static char	*no_path(char *exec)
 	if (fd == -1)
 	{
 		ft_error((const char *[]){_strerror(EEMPTY), exec,
-			": No such file or directory\n", NULL});
+			": No such file or directory\n", NULL}, FALSE);
 		return (NULL);
 	}
 	else
@@ -76,6 +76,6 @@ char	*ft_search_path(char *exec, char *path)
 		return (ft_strdup(no_path(exec)));
 	found = path_lookup(exec, path);
 	if (!found)
-		ft_error((const char *[]){_strerror(EEMPTY), exec, ": command not found\n", NULL});
+		ft_error((const char *[]){_strerror(EEMPTY), exec, ": command not found\n", NULL}, FALSE);
 	return (found);
 }

@@ -7,12 +7,12 @@ static int add_redir(t_btree *node, char *filename, t_way way)
 
 	new_redir = malloc(sizeof(t_redir));
 	if (!new_redir)
-		return (ft_error((const char *[]){_strerror(errno), NULL}));
+		return (ft_error((const char *[]){_strerror(errno), NULL}, TRUE));
 	new_list = malloc(sizeof(t_list));
 	if (!new_list)
 	{
 		free(new_redir);
-		return (ft_error((const char *[]){_strerror(errno), NULL}));
+		return (ft_error((const char *[]){_strerror(errno), NULL}, TRUE));
 	}
 	new_redir->way = way;
 	new_redir->filename = filename;
@@ -32,7 +32,7 @@ static int extract_file(t_btree *node, int *i)
 	init_context(&c);
 	filename = malloc(sizeof(char) * ft_strlen(node->cmd) + 1);
 	if (!filename)
-		return (ft_error((const char *[]){_strerror(errno), NULL}));
+		return (ft_error((const char *[]){_strerror(errno), NULL}, TRUE));
 	redirT = trim_redir(node->cmd, i);
 	j = 0;
 	while (node->cmd[*i])
@@ -61,7 +61,7 @@ int ft_redir(t_btree *node)
 	/* MKO */
 	cmd_wo_redir = malloc(sizeof(char) * ft_strlen(node->cmd) + 1);
 	if (!cmd_wo_redir)
-		return (ft_error((const char *[]){_strerror(errno), NULL}));
+		return (ft_error((const char *[]){_strerror(errno), NULL}, TRUE));
 	while (node->cmd[i])
 	{
 		if (is_context_free(c) && is_redirection(node->cmd[i]))

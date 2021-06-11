@@ -2,10 +2,17 @@
 
 void	ft_cleanup_fd(t_btree *node)
 {
-	if (node->fd[0] != STDIN_FILENO)
+	//printf("clean {%d}-{%d}\n", node->fd[0], node->fd[1]);
+	if (node->fd[0] != -1 && node->fd[0] != STDIN_FILENO)
+	{
 		close(node->fd[0]);
-	if (node->fd[1] != STDOUT_FILENO)
+		node->fd[0] = -1;
+	}
+	if (node->fd[1] != -1 && node->fd[1] != STDOUT_FILENO)
+	{
 		close(node->fd[1]);
+		node->fd[1] = -1;
+	}
 	/* cmd needs to be free */
 	/* rdr needs to be free */
 	/* arv needs to be free */
@@ -27,14 +34,15 @@ static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
 		//printf("EXECV is {%s}\n", full_path);
 		if (execve(full_path, node->argv, dico->envp) == -1)
 		{
-			ft_error((const char *[]){_strerror(errno), NULL});
+			ft_error((const char *[]){_strerror(EEMPTY), full_path, ": ", _strerror(errno), "\n", NULL}, FALSE);
 			exit(CMD_FOUND_NX);
 		}
 	}
 	else if (pid == -1)
 	{
+		free(full_path);
 		exit_code = 1;
-		ft_error((const char *[]){_strerror(errno), NULL});
+		ft_error((const char *[]){_strerror(errno), NULL}, TRUE);
 	}
 	if (!exit_code)
 		wait(&exit_code);
@@ -97,7 +105,7 @@ int	ft_exec(t_btree *node, t_dico *dico)
 	if (!*node->cmd)
 	{
 		ft_cleanup_fd(node);
-		ft_error((const char *[]){_strerror(EEMPTY), "", ": command not found\n", NULL});
+		ft_error((const char *[]){_strerror(EEMPTY), "", ": command not found\n", NULL}, FALSE);
 		return (CMD_NFOUND);
 	}
 	code_return = ft_exec_builtin(node, dico);
