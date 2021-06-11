@@ -28,7 +28,9 @@ int ft_cd(t_btree *node, t_dico *dico)
 {
 	char *path;
 	char *oldpwd;
+	int		code_return;
 
+	code_return = 0;
 	if (!node->argv[1] || !ft_strcmp(node->argv[1], "-"))
 	{
 		if (!node->argv[1])
@@ -40,20 +42,20 @@ int ft_cd(t_btree *node, t_dico *dico)
 	}
 	else
 		path = ft_strdup(node->argv[1]);
-	if (chdir(path) == -1)
+	code_return = chdir(path);
+	if (code_return < 0)
 	{
-		ft_error((const char *[]){_strerror(ECD),
-			path, ": ", _strerror(errno), "\n", NULL}, FALSE);
-		free(path);
-		return (1);
+		ft_error((const char *[]){_strerror(ECD), path, ": ", _strerror(errno), "\n", NULL}, FALSE);
+		code_return = 1;
 	}
-	else 
-	{
-		oldpwd = ft_get_dico_value("PWD", dico);
-		//printf("OLD %s - PATH %s\n", oldpwd, path);
-		ft_set_dico_value(ft_strdup("OLDPWD"), oldpwd, GLOBAL, dico);
+	free(path);
+	oldpwd = ft_get_dico_value("PWD", dico);
+	ft_set_dico_value(ft_strdup("OLDPWD"), oldpwd, GLOBAL, dico);
+	path = getcwd(NULL, 0); 
+	if (path)
 		ft_set_dico_value(ft_strdup("PWD"), getcwd(NULL, 0), GLOBAL, dico);
-		free(path);
-		return (0);
-	}
+	else if (code_return == 0)
+		ft_error((const char *[]){_strerror(ECD), "error retrieving current directory: getcwd: ", _strerror(errno), "\n", NULL}, FALSE);
+	free(path);
+	return code_return;
 }

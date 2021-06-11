@@ -48,7 +48,7 @@ static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
 	{
 		free(full_path);
 		exit_code = 1;
-		ft_error((const char *[]){_strerror(errno), NULL}, TRUE);
+		ft_error((const char *[]){_strerror(errno),"\n", NULL}, TRUE);
 	}
 	if (!exit_code)
 	{

@@ -113,7 +113,7 @@ t_btree	*btree_new_node(char *cmd, t_btree *parent, t_side side, t_type op)
 
 	node = (t_btree *)malloc(sizeof(t_btree));
 	if (!node)
-		ft_error((t_strs){_strerror(errno), NULL}, 1);
+		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
 	node->cmd = cmd;
 	node->parent = parent;
 	node->left = 0;

@@ -12,7 +12,6 @@
 #include <termios.h>
 #include <string.h>
 #include <signal.h>
-#include <curses.h>
 #include <sys/ioctl.h>
 #include "libft.h"
 
@@ -62,7 +61,10 @@ typedef enum e_scope {
 	EXPORT,
 }			t_scope;
 
-typedef _Bool t_bool;
+typedef enum e_bool{
+	FALSE,
+	TRUE,
+}			t_bool;
 
 typedef enum e_side { 
 	ROOT,
