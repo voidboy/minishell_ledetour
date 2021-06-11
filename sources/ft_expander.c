@@ -103,7 +103,13 @@ static char **split_on_expension(char *str, int ec)
 				free(expanded[--i]);
 			return (NULL);
 		}
-		find_next_word(expanded[i++], str, &j);
+		if (str[j] == '$' && str[j + 1] == '?')
+		{
+			ft_strcpy(expanded[i++], "$?");
+			j += 2;
+		}
+		else 
+			find_next_word(expanded[i++], str, &j);
 	}
 	expanded[i] = NULL;
 	return (expanded);
