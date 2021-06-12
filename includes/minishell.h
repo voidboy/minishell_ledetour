@@ -14,6 +14,7 @@
 #include <signal.h>
 #include <curses.h>
 #include <sys/ioctl.h>
+#include <readline/readline.h>
 #include "libft.h"
 
 # define CMD_FOUND_NX	126
