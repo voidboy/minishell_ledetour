@@ -8,7 +8,7 @@ int ft_free_strs(char **strs)
 	while (strs && strs[++i])
 		free(strs[i]);
 	free(strs);
-	return 0;
+	return (0);
 }
 
 void ft_free_redir(void *content)

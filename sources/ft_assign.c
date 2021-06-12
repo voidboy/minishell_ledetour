@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-void ft_free_lstassign(void *ivar)
+void	ft_free_lstassign(void *ivar)
 {
 	free(ivar);
 }
 
-int ft_free_vars(t_var *var, int len, int r)
+int	ft_free_vars(t_var *var, int len, int r)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (r && ++i < len)
@@ -16,7 +16,7 @@ int ft_free_vars(t_var *var, int len, int r)
 		free(var[i].value);
 	}
 	free(var);
-	return 0;
+	return (0);
 }
 
 int	ft_get_varkey(char *str, int i)
@@ -29,7 +29,7 @@ int	ft_get_varkey(char *str, int i)
 	i++;
 	if (!ft_isalpha(str[i]) && str[i] != '_')
 		return (-1);
-	return i;
+	return (i);
 }
 
 int	ft_get_varvalue(char *str, int i)
@@ -37,29 +37,34 @@ int	ft_get_varvalue(char *str, int i)
 	while (ft_quoting(str, &i, NULL) >= 0 && str[i])
 	{
 		if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
-			   break;
+			   break ;
 		i++;
 	}
-	return i;
+	return (i);
+}
+
+int	ft_goto_assign(char *str, int *i)
+{
+	while (str[*i] && (str[*i] == ' ' || str[*i] == '\t'))
+		(*i)++;
+	if (!ft_isalpha(str[*i]) && str[(*i)++] != '_')
+		return (0);
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
+		(*i)++;
+	return (1);
 }
 
 void	ft_find_assign(char *str, t_list **lstassign, int index)
 {
 	t_index_var	*ivar;
 
-	while (str[index] && (str[index] == ' ' || str[index] == '\t'))
-		index++;
-	if (!ft_isalpha(str[index]) && str[index++] != '_')
-		return ;
-	while (str[index] && (ft_isalnum(str[index]) || str[index] == '_'))
-		index++;
-	if (str[index] == '=')
+	if (ft_goto_assign(str, &index) && str[index] == '=')
 	{
 		ivar = malloc(sizeof(t_index_var) * 1);
 		if (!ivar)
 		{
 			ft_lstclear(lstassign, ft_free_lstassign);
-			ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
+			ft_error((t_strs){_strerror(errno), "\n", NULL}, 1);
 		}
 		ivar->equal = index;
 		ivar->key = ft_get_varkey(str, index);
@@ -77,10 +82,10 @@ void	ft_find_assign(char *str, t_list **lstassign, int index)
 	}
 }
 
-int	 ft_len_extact_assign(char *str, t_list *lstassign)
+int	ft_len_extact_assign(char *str, t_list *lstassign)
 {
-	int len;
-	t_index_var *ivar;
+	int			len;
+	t_index_var	*ivar;
 
 	len = 0;
 	while (lstassign)
@@ -92,13 +97,10 @@ int	 ft_len_extact_assign(char *str, t_list *lstassign)
 	return (ft_strlen(str) - len);
 }
 
-int	ft_extract_assign(t_btree *node, t_list *lstassign, t_var *vars)
+char	*ft_create_newcmd(t_btree *node, t_list *lstassign, t_var *vars)
 {
-	char *newstr;
-	t_index_var *ivar;
-	int len;
-	int	i;
-	int j;
+	char	*newstr;
+	int		len;
 
 	len = ft_len_extact_assign(node->cmd, lstassign);
 	newstr = malloc(sizeof(char) * len + 1);
@@ -106,45 +108,75 @@ int	ft_extract_assign(t_btree *node, t_list *lstassign, t_var *vars)
 	{
 		ft_lstclear(&lstassign, ft_free_lstassign);
 		ft_free_vars(vars, len, !(node->cmd == NULL));
+		ft_error((t_strs){_strerror(errno), "\n", NULL}, 1);
 	}
 	newstr[len] = 0;
-	i = 0;
-	j = 0;
-	len = 0;
+	return (newstr);
+}
+
+void	ft_set_var(t_btree *node, t_var *var, t_index_var *ivar)
+{
+	var->key = ft_substr(node->cmd, ivar->key, ivar->equal - ivar->key);
+	var->value = ft_substr(node->cmd, ivar->equal + 1, \
+			ivar->value - ivar->equal - 1);
+}
+
+int	ft_extract_assign(t_btree *node, t_list *lstassign, t_var *vars)
+{
+	char		*newcmd;
+	t_index_var	*ivar;
+	t_counter	c;
+
+	newcmd = ft_create_newcmd(node, lstassign, vars);
+	c.i = 0;
+	c.j = 0;
+	c.k = 0;
 	while (lstassign)
 	{
 		ivar = lstassign->content;
-		vars[j].key = ft_substr(node->cmd, ivar->key, ivar->equal - ivar->key);
-		vars[j].value = ft_substr(node->cmd, ivar->equal + 1, ivar->value - ivar->equal - 1);
-		j++;
-		while (node->cmd[i] && i < ivar->key)
-			newstr[len++]= node->cmd[i++];
-		i = ivar->value;
+		ft_set_var(node, &(vars[c.j]), ivar);
+		c.j++;
+		while (node->cmd[c.i] && c.i < ivar->key)
+			newcmd[c.k++] = node->cmd[c.i++];
+		c.i = ivar->value;
 		lstassign = lstassign->next;
 	}
-	while (node->cmd[i])
-		newstr[len++]= node->cmd[i++];
+	while (node->cmd[c.i])
+		newcmd[c.k++] = node->cmd[c.i++];
 	free(node->cmd);
-	node->cmd = newstr;
-	return 0;
+	node->cmd = newcmd;
+	return (0);
 }
 
-int	ft_apply_assign(t_var *vars,t_dico *dico, int nbvars)
+int	ft_apply_assign(t_var *vars, t_dico *dico, int nbvars)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < nbvars)
-		ft_set_dico_value(vars[i].key, ft_sanitize(ft_expander(vars[i].value, dico)), LOCAL, dico);
-	return 0;
+		ft_set_dico_value(vars[i].key, \
+				ft_sanitize(ft_expander(vars[i].value, dico)), LOCAL, dico);
+	return (0);
 }
 
-int ft_assign(t_btree *node, t_dico *dico)
+void	ft_create_argv(t_btree *node, t_dico *dico)
 {
-	t_list *lstassign;
+	int	i;
+
+	node->cmd = ft_expander(node->cmd, dico);
+	node->argv = ft_break(node->cmd, " \t\n");
+	i = -1;
+	while (node->argv[++i])
+		node->argv[i] = ft_sanitize(node->argv[i]);
+	free(node->cmd);
+	node->cmd = ft_strdup(node->argv[0]);
+}
+
+int	ft_assign(t_btree *node, t_dico *dico)
+{
+	t_list	*lstassign;
 	t_var	*vars;
 	int		len;
-	int		i;
 
 	lstassign = NULL;
 	vars = NULL;
@@ -154,19 +186,13 @@ int ft_assign(t_btree *node, t_dico *dico)
 	if (!vars)
 	{
 		ft_lstclear(&lstassign, ft_free_lstassign);
-		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
+		ft_error((t_strs){_strerror(errno), "\n", NULL}, 1);
 	}
 	ft_extract_assign(node, lstassign, vars);
-	node->cmd = ft_expander(node->cmd, dico);
-	node->argv = ft_break(node->cmd, " \t\n"); 
-	i= -1;
-	while (node->argv[++i])
-		node->argv[i] = ft_sanitize(node->argv[i]);
-	free(node->cmd);
-	node->cmd = ft_strdup(node->argv[0]);
+	ft_create_argv(node, dico);
 	ft_lstclear(&lstassign, ft_free_lstassign);
 	if (node->cmd == NULL)
 		ft_apply_assign(vars, dico, len);
 	ft_free_vars(vars, len, !(node->cmd == NULL));
-	return 0;
+	return (0);
 }

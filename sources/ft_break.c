@@ -2,8 +2,8 @@
 
 char	*ft_strstr(char *str, char *to_find)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (ft_quoting(str, &i, NULL) >= 0 && str[i])
@@ -25,7 +25,7 @@ char	**ft_add_str(char **tab_str, char *str, int size_tab)
 
 	new_tab = malloc((size_tab + 2) * sizeof(char *));
 	if (!new_tab)
-		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
+		ft_error((t_strs){_strerror(errno), "\n", NULL}, 1);
 	i = 0;
 	while (i < size_tab)
 	{
@@ -48,7 +48,7 @@ char	*ft_create_str(char *start, char *end)
 	size = end - start + 1;
 	str = malloc((size + 1) * sizeof(char));
 	if (!str)
-		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
+		ft_error((t_strs){_strerror(errno), "\n", NULL}, 1);
 	while (start <= end)
 	{
 		str[i] = *start;
@@ -69,7 +69,7 @@ char	**ft_break(char *str, char *charset)
 	size_tab = 0;
 	tab_str = malloc(sizeof(char *));
 	if (!tab_str)
-		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
+		ft_error((t_strs){_strerror(errno), "\n", NULL}, 1);
 	*tab_str = 0;
 	while (str && *str)
 	{
@@ -80,12 +80,10 @@ char	**ft_break(char *str, char *charset)
 			tab_str = ft_add_str(tab_str, substr, size_tab);
 			size_tab++;
 			str = pos_charset + 1;
+			continue ;
 		}
-		else
-		{
-			free(substr);
-			str++;
-		}
+		free(substr);
+		str++;
 	}
 	return (tab_str);
 }

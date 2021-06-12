@@ -2,23 +2,23 @@
 
 int	ft_isvalid_id(char *str)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (str[++i])
 	{
 		if (i == 0 && !ft_isalpha(str[i]) && str[i] != '_')
-			return 0;
+			return (0);
 		if (i > 0 && !ft_isalnum(str[i]) && str[i] != '_')
-			return 0;
+			return (0);
 	}
-	return 1;
+	return (1);
 }
 
-int ft_unset(t_btree *node, t_dico *dico)
+int	ft_unset(t_btree *node, t_dico *dico)
 {
-	char **argv;
-	int code_return;
+	char	**argv;
+	int		code_return;
 
 	code_return = 0;
 	argv = node->argv + 1;
@@ -28,7 +28,8 @@ int ft_unset(t_btree *node, t_dico *dico)
 	{
 		if (!ft_isvalid_id(*argv))
 		{
-			ft_error((const char *[]){_strerror(EEXPORT) ,"`",*argv ,"': not a valid identifier\n", NULL}, FALSE);
+			ft_error((const char *[]){_strerror(EUNSET), "`", \
+					*argv, "': not a valid identifier\n", NULL}, FALSE);
 			code_return = 1;
 		}
 		else

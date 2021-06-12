@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-void ft_set_vars(t_btree *node, t_dico *dico, int code_return)
+void	ft_set_vars(t_btree *node, t_dico *dico, int code_return)
 {
-	char **argv;
-	int	i;
+	char	**argv;
+	int		i;
 
 	ft_set_dico_value(ft_strdup("?"), ft_itoa(code_return), LOCAL, dico);
 	argv = node->argv;
@@ -11,22 +11,22 @@ void ft_set_vars(t_btree *node, t_dico *dico, int code_return)
 	while (argv && argv[++i])
 		;
 	if (argv && i > 0)
-		ft_set_dico_value(ft_strdup("_"), ft_strdup(argv[i-1]), GLOBAL, dico);
+		ft_set_dico_value(ft_strdup("_"), ft_strdup(argv[i - 1]), GLOBAL, dico);
 }
 
-int ft_execute_node(t_btree *node, t_dico *dico)
+int	ft_execute_node(t_btree *node, t_dico *dico)
 {
 	ft_pipes(node);
 	ft_redir(node);
 	ft_assign(node, dico);
 	if (ft_apply_redir(node, dico) == 0)
 		return (ft_exec(node, dico));
-	return 1;
+	return (1);
 }
 
-int ft_cross(t_btree *root, t_dico *dico)
+int	ft_cross(t_btree *root, t_dico *dico)
 {
-	static int code_return;
+	static int	code_return;
 
 	if (root)
 	{
@@ -44,5 +44,5 @@ int ft_cross(t_btree *root, t_dico *dico)
 			ft_set_vars(root, dico, code_return);
 		}
 	}
-	return code_return;
+	return (code_return);
 }

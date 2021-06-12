@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char *ft_cmdtrim(char *s)
+char	*ft_cmdtrim(char *s)
 {
 	int		start;
 	int		end;
@@ -8,7 +8,7 @@ char *ft_cmdtrim(char *s)
 	int		len;
 
 	tmp = " \t";
-	len = ft_strlen(s); 
+	len = ft_strlen(s);
 	if (!len)
 		return (NULL);
 	start = 0;
@@ -52,19 +52,19 @@ int	ft_find_last(char *hay, char *need)
 		else
 			i++;
 	}
-	return (save_i);	
+	return (save_i);
 }
 
-int ft_op_is_finded(t_type *op,int *index)
+int	ft_op_is_finded(t_type *op, int *index)
 {
-	static int ex_index = -1;
+	static int	ex_index = -1;
 
 	if (*index >= 0 || ex_index >= 0)
 	{
 		if (*op == AND)
 		{
 			ex_index = *index;
-			return 0;
+			return (0);
 		}
 		if (ex_index > *index)
 		{
@@ -108,12 +108,12 @@ t_type	ft_split_op(char *line, char **s_op, char **s_left, char **s_right)
 
 t_btree	*btree_new_node(char *cmd, t_btree *parent, t_side side, t_type op)
 {
-	t_btree *node;
-	static int id;
+	t_btree		*node;
+	static int	id;
 
 	node = (t_btree *)malloc(sizeof(t_btree));
 	if (!node)
-		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
+		ft_error((t_strs){_strerror(errno), "\n", NULL}, 1);
 	node->cmd = cmd;
 	node->parent = parent;
 	node->left = 0;
@@ -123,7 +123,7 @@ t_btree	*btree_new_node(char *cmd, t_btree *parent, t_side side, t_type op)
 	node->side = side;
 	node->redir = NULL;
 	node->type = op;
-	if (node->cmd[0]=='\n')
+	if (node->cmd[0] == '\n')
 		node->type = NEWLINE;
 	node->redir = NULL;
 	node->fd[0] = STDIN_FILENO;
@@ -133,7 +133,7 @@ t_btree	*btree_new_node(char *cmd, t_btree *parent, t_side side, t_type op)
 	return (node);
 }
 
-t_btree *ft_wrap_sow(char *line, t_btree *parent, t_side side)
+t_btree	*ft_wrap_sow(char *line, t_btree *parent, t_side side)
 {
 	char	*strs[3];
 	t_btree	*root;
@@ -154,7 +154,7 @@ t_btree *ft_wrap_sow(char *line, t_btree *parent, t_side side)
 		return (btree_new_node(line, parent, side, CMD));
 }
 
-t_btree *ft_sow(char *line)
+t_btree	*ft_sow(char *line)
 {
 	g_minishell.root = ft_wrap_sow(line, NULL, ROOT);
 	return (g_minishell.root);

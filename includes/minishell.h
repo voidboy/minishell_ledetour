@@ -68,6 +68,12 @@ typedef enum e_bool{
 	TRUE,
 }			t_bool;
 
+typedef struct s_counter{
+	int i;
+	int j;
+	int k;
+}			t_counter;
+
 typedef enum e_side { 
 	ROOT,
 	LEFT,
@@ -184,10 +190,6 @@ int	ft_exec(t_btree *node, t_dico *dico);
 
 /* sanitize */
 char *ft_sanitize(char *str);
-
-/* gnl */
-int	get_next_line(int fd, char **line);
-int	gnl(int fd, char **line);
 
 /* expension */
 char *ft_expander(char *str, t_dico *dico);

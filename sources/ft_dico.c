@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void ft_escape_declare(char *str, int fd)
+void	ft_escape_declare(char *str, int fd)
 {
 	while (str && *str)
 	{
@@ -9,42 +9,45 @@ void ft_escape_declare(char *str, int fd)
 		ft_putchar_fd(*str, fd);
 		str++;
 	}
-}	  
+}
 
-int ft_show_envp(t_dico *dico, int declare, int fd)
+void	ft_show_var(t_var *var, int declare, int fd)
 {
-	t_list *sets;
-	t_var *var;
+	if (declare)
+		ft_putstr_fd("declare -x ", fd);
+	ft_putstr_fd(var->key, fd);
+	if (var->scope != EXPORT)
+		ft_putstr_fd("=", fd);
+	if (declare && var->scope != EXPORT)
+		ft_putstr_fd("\"", fd);
+	if (!declare)
+		ft_putstr_fd(var->value, fd);
+	else
+		ft_escape_declare(var->value, fd);
+	if (declare && var->scope != EXPORT)
+		ft_putstr_fd("\"", fd);
+	ft_putstr_fd("\n", fd);
+}
+
+int	ft_show_envp(t_dico *dico, int declare, int fd)
+{
+	t_list	*sets;
+	t_var	*var;
 
 	sets = dico->sets;
 	while (sets)
 	{
 		var = sets->content;
 		if (var->scope == GLOBAL || (declare && var->scope == EXPORT))
-		{
-			if (declare)
-				ft_putstr_fd("declare -x ", fd);
-			ft_putstr_fd(var->key, fd);
-			if (var->scope != EXPORT)
-				ft_putstr_fd("=", fd);
-			if (declare && var->scope != EXPORT)
-				ft_putstr_fd("\"", fd);
-			if (!declare)
-				ft_putstr_fd(var->value, fd);
-			else
-				ft_escape_declare(var->value, fd);
-			if (declare && var->scope != EXPORT)
-				ft_putstr_fd("\"", fd);
-			ft_putstr_fd("\n", fd);
-		}
+			ft_show_var(var, declare, fd);
 		sets = sets->next;
 	}
-	return 0;
+	return (0);
 }
 
-t_var *ft_get_dico_var(char *key, t_dico *dico)
+t_var	*ft_get_dico_var(char *key, t_dico *dico)
 {
-	t_list *sets;
+	t_list	*sets;
 	t_var	*var;
 
 	sets = dico->sets;
@@ -52,7 +55,7 @@ t_var *ft_get_dico_var(char *key, t_dico *dico)
 	{
 		var = sets->content;
 		if (ft_strcmp(var->key, key) == 0)
-			return var;
+			return (var);
 		sets = sets->next;
 	}
 	return (NULL);
@@ -78,7 +81,7 @@ int	ft_rm_dico_var(char *key, t_dico *dico)
 			free(var->value);
 			free(var);
 			free(current);
-			return 1;
+			return (1);
 		}
 		previous = current;
 		current = current->next;
@@ -92,12 +95,12 @@ int	ft_new_dico_var(char *key, char *value, t_scope scope, t_dico *dico)
 
 	var = malloc(sizeof(t_var));
 	if (!var)
-		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
+		ft_error((t_strs){_strerror(errno), "\n", NULL}, 1);
 	var->key = key;
 	var->value = value;
 	var->scope = scope;
 	ft_lstadd_back(&dico->sets, ft_lstnew(var));
-	return 0;
+	return (0);
 }
 
 int	ft_set_dico_value(char *key, char *value, t_scope scope, t_dico *dico)
@@ -117,10 +120,10 @@ int	ft_set_dico_value(char *key, char *value, t_scope scope, t_dico *dico)
 		ft_new_dico_var(key, value, scope, dico);
 	if (scope == GLOBAL)
 		ft_set_envp(dico);
-	return 0;
+	return (0);
 }
 
-char *ft_get_dico_value(char *key, t_dico *dico)
+char	*ft_get_dico_value(char *key, t_dico *dico)
 {
 	t_list	*current;
 	t_var	*content;
@@ -131,16 +134,15 @@ char *ft_get_dico_value(char *key, t_dico *dico)
 		content = current->content;
 		if (!ft_strcmp(key, content->key))
 			return (ft_strdup(content->value));
-		else 
-			current = current->next;
+		current = current->next;
 	}
 	return (NULL);
 }
 
-t_var *ft_str_to_var(char *str, int verify)
+t_var	*ft_str_to_var(char *str, int verify)
 {
-	t_var *var;
-	int	i;
+	t_var	*var;
+	int		i;
 
 	i = -1;
 	while (str[++i] && str[i] != '=')
@@ -148,14 +150,14 @@ t_var *ft_str_to_var(char *str, int verify)
 		if (verify)
 		{
 			if (i == 0 && !ft_isalpha(str[i]) && str[i] != '_')
-				return NULL;
+				return (NULL);
 			if (i > 0 && !ft_isalnum(str[i]) && str[i] != '_')
-				return NULL;
+				return (NULL);
 		}
 	}
 	var = malloc(sizeof(t_var));
 	if (!var)
-		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
+		ft_error((t_strs){_strerror(errno), "\n", NULL}, 1);
 	var->key = ft_substr(str, 0, i);
 	var->value = ft_substr(str, i + 1, ft_strlen(str) - i);
 	var->scope = GLOBAL;
@@ -174,7 +176,7 @@ int	ft_set_envp(t_dico *dico)
 	len = ft_lstsize(sets);
 	dico->envp = malloc(sizeof(char *) * (len + 1));
 	if (!dico->envp)
-		ft_error((t_strs){_strerror(errno),"\n", NULL}, 1);
+		ft_error((t_strs){_strerror(errno), "\n", NULL}, 1);
 	dico->envp[len] = NULL;
 	len = -1;
 	while (sets)
@@ -186,12 +188,12 @@ int	ft_set_envp(t_dico *dico)
 		free(tmp);
 		sets = sets->next;
 	}
-	return 0;
+	return (0);
 }
 
-int ft_set_dico(t_dico *dico, char **envp)
+int	ft_set_dico(t_dico *dico, char **envp)
 {
-	t_var *var;
+	t_var	*var;
 
 	while (*envp)
 	{
@@ -201,7 +203,7 @@ int ft_set_dico(t_dico *dico, char **envp)
 		envp++;
 	}
 	ft_set_envp(dico);
-	ft_new_dico_var(ft_strdup("?"), ft_strdup("0"), LOCAL,dico);
+	ft_new_dico_var(ft_strdup("?"), ft_strdup("0"), LOCAL, dico);
 	g_minishell.dico = dico;
-	return 0;
+	return (0);
 }

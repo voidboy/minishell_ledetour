@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-void ft_here_doc_read(void *n)
+void	ft_here_doc_read(void *n)
 {
 	char	*tmp;
 	char	*line;
-	t_btree *node;
+	t_btree	*node;
 
 	node = (t_btree *)n;
 	if (!node->delimiter)
@@ -13,7 +13,6 @@ void ft_here_doc_read(void *n)
 	while (1)
 	{
 		line = readline("> ");
-		//printf("line is [%s] : \n", line);
 		if (!ft_strcmp(line, node->delimiter))
 		{
 			free(line);
@@ -24,11 +23,10 @@ void ft_here_doc_read(void *n)
 		free(tmp);
 		free(line);
 	}
-	//printf("node->buff is {%s}\n", node->buff);
 }
 
-int ft_open_her_doc(t_btree *root)
+int	ft_open_her_doc(t_btree *root)
 {
 	btree_apply_infix(root, ft_here_doc_read);
-	return 0;
+	return (0);
 }

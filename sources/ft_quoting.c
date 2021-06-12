@@ -2,7 +2,7 @@
 
 int	ft_dbl_quoting(char *str, int *i, char *newstr)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	if (str[*i] && str[*i] == '\"')
@@ -28,7 +28,7 @@ int	ft_dbl_quoting(char *str, int *i, char *newstr)
 
 int	ft_simple_quoting(char *str, int *i, char *newstr)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	if (str[*i] && str[*i] == '\'')
@@ -49,7 +49,7 @@ int	ft_simple_quoting(char *str, int *i, char *newstr)
 
 int	ft_backslash(char *str, int *i, char *newstr)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while (str[*i] && str[*i] == '\\')
@@ -63,13 +63,13 @@ int	ft_backslash(char *str, int *i, char *newstr)
 			(*i)++;
 		}
 	}
-	return len;
+	return (len);
 }
 
 int	ft_quoting(char *str, int *i, char *newstr)
 {
-	int len;
-	int save_i;
+	int	len;
+	int	save_i;
 	int	w;
 
 	len = 0;
@@ -79,7 +79,6 @@ int	ft_quoting(char *str, int *i, char *newstr)
 	save_i = -1;
 	while (save_i != *i && str && str[*i])
 	{
-//		printf("%s - ^%c^\n", newstr, str[*i]);
 		save_i = *i;
 		len += ft_backslash(str, i, newstr);
 		newstr += len * w;
@@ -91,10 +90,10 @@ int	ft_quoting(char *str, int *i, char *newstr)
 	return (len);
 }
 
-int ft_len_sanitize(char *str)
+int	ft_len_sanitize(char *str)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	len = 0;
 	i = 0;
@@ -107,25 +106,22 @@ int ft_len_sanitize(char *str)
 			len++;
 		}
 	}
-	return len;
+	return (len);
 }
 
-char *ft_sanitize(char *str)
+char	*ft_sanitize(char *str)
 {
-	int len;
-	char *newstr;
-	int i;
+	int		len;
+	char	*newstr;
+	int		i;
 
 	if (!str)
-		return NULL;
-	//printf("str{%s}\n", str);
+		return (NULL);
 	len = ft_len_sanitize(str);
 	newstr = malloc(sizeof(char) * (len + 1));
 	if (!newstr)
-		return NULL;
+		ft_error((t_strs){_strerror(errno), "\n", NULL}, 1);
 	newstr[len] = 0;
-//	printf("len is {%d}\n", len);
-//	printf("argv is {%s}\n", str);
 	len = 0;
 	i = 0;
 	while (str[i])
@@ -135,6 +131,5 @@ char *ft_sanitize(char *str)
 			newstr[len++] = str[i++];
 	}
 	free(str);
-	//printf("str{%s}\n", newstr);
-	return newstr;
+	return (newstr);
 }
