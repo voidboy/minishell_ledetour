@@ -4,13 +4,19 @@ t_minishell g_minishell;
 
 static void sig_handler(int n)
 {
-	rl_on_new_line(); // Regenerate the prompt on a newline
-    rl_replace_line(); // Clear the previous text
-    rl_redisplay();
-	if (isatty(STDIN_FILENO))
-		echo_control_seq(FALSE);
 	if (n == SIGINT)
-		write(STDOUT_FILENO, "\nminishell> ", 12);
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		rl_on_new_line();
+    	rl_replace_line("",0); 
+    	//rl_redisplay();
+	}
+	if (n == SIGQUIT)
+	{
+    	rl_replace_line("",0);
+		rl_on_new_line();
+    	//rl_redisplay();
+	}
 }
 
 int main(int ac, char **argv, char **envp)

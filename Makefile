@@ -40,7 +40,7 @@ all		:	$(NAME)
 
 $(NAME)	:	$(OBJS) 
 			make bonus -j 4 -C libft
-			$(CC) $(FLAG) -o $(NAME) $(OBJS) libft/libft.a -lreadline
+			$(CC) $(FLAG) -o $(NAME) $(OBJS) libft/libft.a libreadline.a -lcurses
 
 %.o		:	%.c
 			$(CC) $(FLAG) -o $@ -c $<  
