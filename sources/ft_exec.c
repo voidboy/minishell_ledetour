@@ -28,7 +28,7 @@ static void	setup_child(char *full_path, t_btree *node, t_dico *dico)
 	}
 }
 
-static void	clean_child(int *exit_code)
+static void	lookup_child(int *exit_code)
 {
 	if (WIFSIGNALED(*exit_code))
 	{
@@ -60,7 +60,7 @@ static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
 	if (!exit_code)
 	{
 		wait(&exit_code);
-		clean_child(&exit_code);
+		lookup_child(&exit_code);
 	}
 	free(full_path);
 	ft_cleanup_fd(node);

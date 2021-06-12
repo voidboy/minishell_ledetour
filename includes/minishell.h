@@ -64,9 +64,9 @@ typedef enum e_bool{
 }			t_bool;
 
 typedef struct s_counter{
-	int i;
-	int j;
-	int k;
+	int	i;
+	int	j;
+	int	k;
 }			t_counter;
 
 typedef enum e_side {
@@ -99,6 +99,7 @@ typedef struct s_btree {
 	int				fd[2];
 	char			*buff;
 	char			*delimiter;
+	int				pid;
 }				t_btree;
 
 typedef struct s_var {
