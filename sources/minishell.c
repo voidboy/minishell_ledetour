@@ -4,15 +4,8 @@ t_minishell g_minishell;
 
 static void sig_handler(int n)
 {
-	struct termios conf;
-
-	(void)n;
 	if (isatty(STDIN_FILENO))
-	{
-		ioctl(ttyslot(), TIOCGETA, &conf);
-		conf.c_lflag &= ~(ECHOCTL);
-		ioctl(ttyslot(), TIOCSETA, &conf);
-	}
+		echo_control_seq(FALSE);
 	if (n == SIGINT)
 		write(STDOUT_FILENO, "\nminishell> ", 12);
 }

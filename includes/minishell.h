@@ -185,6 +185,7 @@ char	*ft_search_path(char *exec, char *path);
 int		ft_exec(t_btree *node, t_dico *dico);
 
 /* >>> Utils */
+void	echo_control_seq(t_bool c);
 
 /* sanitize */
 char	*ft_sanitize(char *str);

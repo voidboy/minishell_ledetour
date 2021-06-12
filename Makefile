@@ -12,6 +12,7 @@ SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_pwd.c \
 			sources/ft_cd.c \
 			sources/ft_exit.c \
+			sources/ft_utils.c \
 			sources/ft_context.c \
 			sources/ft_cross.c \
 			sources/ft_dico.c \
