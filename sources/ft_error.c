@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-int ft_free_strs(char **strs)
+int	ft_free_strs(char **strs)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (strs && strs[++i])
@@ -11,7 +11,7 @@ int ft_free_strs(char **strs)
 	return (0);
 }
 
-void ft_free_redir(void *content)
+void	ft_free_redir(void *content)
 {
 	free(((t_redir *)content)->filename);
 	free(content);
@@ -19,7 +19,7 @@ void ft_free_redir(void *content)
 
 void	ft_free_node(void *_node)
 {
-	t_btree *node;
+	t_btree	*node;
 
 	node = _node;
 	ft_lstclear(&(node->redir), ft_free_redir);
@@ -30,7 +30,7 @@ void	ft_free_node(void *_node)
 	free(node);
 }
 
-void ft_free_sets(void *content)
+void	ft_free_sets(void *content)
 {
 	free(((t_var *)content)->key);
 	free(((t_var *)content)->value);
@@ -60,7 +60,7 @@ char	*_strerror(int _errno)
 	};
 
 	if (_errno > ELAST)
-		return (strs_error[_errno % ELAST]);
+		return (strs_error[_errno % EOFFSET]);
 	else
 		return (strerror(_errno));
 }
@@ -76,12 +76,13 @@ static int	pick_error(t_type t)
 		" `newline'\n",
 	};
 
-	return (ft_error((const char *[]){_strerror(EPARSE), strs_error[t], NULL}, FALSE));
+	return (ft_error((const char *[]){_strerror(EPARSE),
+			strs_error[t], NULL}, FALSE));
 }
 
 int	ft_error(const char *msg[], t_bool is_fatal)
 {
-	int 	i;
+	int	i;
 
 	i = -1;
 	if (msg)
@@ -92,7 +93,7 @@ int	ft_error(const char *msg[], t_bool is_fatal)
 		ft_free(g_minishell.root, g_minishell.dico);
 		exit(EXIT_FAILURE);
 	}
-	else 
+	else
 		return (ERROR);
 }
 
@@ -106,7 +107,8 @@ void	parse_error(t_btree *node, char last)
 	{
 		error[0] = last;
 		error[1] = '\0';
-		ft_error((const char *[]){_strerror(EPARSE), " `", error, "'\n", NULL}, FALSE);
+		ft_error((const char *[]){_strerror(EPARSE),
+			" `", error, "'\n", NULL}, FALSE);
 	}
 	else if (node->side == LEFT)
 		pick_error(node->parent->type);
@@ -118,7 +120,7 @@ int	check_left(t_btree *node)
 {
 	if (!node->left)
 		return (pick_error(node->type));
-	else 
+	else
 		return (SUCCESS);
 }
 
@@ -129,6 +131,6 @@ int	check_right(t_btree *node)
 		return (pick_error(NEWLINE));
 	else if (!node->right)
 		return (pick_error(node->parent->type));
-	else 
+	else
 		return (SUCCESS);
 }
