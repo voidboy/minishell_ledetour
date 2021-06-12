@@ -99,7 +99,6 @@ typedef struct s_btree {
 	int				fd[2];
 	char			*buff;
 	char			*delimiter;
-	int				pid;
 }				t_btree;
 
 typedef struct s_var {
@@ -126,8 +125,7 @@ typedef struct s_minishell
 	t_dico	*dico;
 }				t_minishell;
 
-typedef const char *t_strs[];
-extern t_minishell	g_minishell;
+typedef const char	*t_strs[];
 
 /* >>> Gestion erreur */
 int		ft_error(const char *msg[], t_bool is_fatal);
@@ -187,6 +185,7 @@ int		ft_exec(t_btree *node, t_dico *dico);
 
 /* >>> Utils */
 void	echo_control_seq(t_bool c);
+char	*add_linefeed(char *str);
 
 /* sanitize */
 char	*ft_sanitize(char *str);

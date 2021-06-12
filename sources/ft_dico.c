@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern t_minishell	g_minishell;
+
 void	ft_escape_declare(char *str, int fd)
 {
 	while (str && *str)

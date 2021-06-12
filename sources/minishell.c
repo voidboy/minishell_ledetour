@@ -4,6 +4,9 @@ t_minishell g_minishell;
 
 static void sig_handler(int n)
 {
+	rl_on_new_line(); // Regenerate the prompt on a newline
+    rl_replace_line(); // Clear the previous text
+    rl_redisplay();
 	if (isatty(STDIN_FILENO))
 		echo_control_seq(FALSE);
 	if (n == SIGINT)
@@ -28,9 +31,8 @@ int main(int ac, char **argv, char **envp)
 	while (1)
 	{
 		line = readline("minishell> ");
-		rl_on_new_line();
-		//printf("\nline : %s\n\n", line);
-		if (!ft_strlen(line))
+	//	printf("\nline : {%s}\n\n", line);
+		if (!line)
 		{
 			/* we should free here */
 			write(STDOUT_FILENO, "exit\n", 5);

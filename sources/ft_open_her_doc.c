@@ -13,11 +13,13 @@ void	ft_here_doc_read(void *n)
 	while (1)
 	{
 		line = readline("> ");
-		if (!ft_strcmp(line, node->delimiter))
+		rl_on_new_line();
+		if (!line || !ft_strcmp(line, node->delimiter))
 		{
 			free(line);
 			break ;
 		}
+		line = add_linefeed(line);
 		tmp = node->buff;
 		node->buff = ft_strjoin(node->buff, line);
 		free(tmp);
