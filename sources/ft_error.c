@@ -56,6 +56,7 @@ char	*_strerror(int _errno)
 		"minishell: cd: ",
 		"minishell: exit: ",
 		"minishell: echo: ",
+		"minishell: pwd: ",
 	};
 
 	if (_errno > ELAST)

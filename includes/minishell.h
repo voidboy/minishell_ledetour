@@ -12,7 +12,6 @@
 #include <termios.h>
 #include <string.h>
 #include <signal.h>
-#include <curses.h>
 #include <sys/ioctl.h>
 #include <readline/readline.h>
 #include "libft.h"
@@ -34,6 +33,7 @@
 # define ECD			(ELAST + 6)
 # define EEXIT			(ELAST + 7)
 # define EECHO			(ELAST + 8)
+# define EPWD			(ELAST + 9)
 # define NBFCT			7	
 
 /* >>> Lecture de la commande [TODO] */
@@ -63,7 +63,10 @@ typedef enum e_scope {
 	EXPORT,
 }			t_scope;
 
-typedef _Bool t_bool;
+typedef enum e_bool{
+	FALSE,
+	TRUE,
+}			t_bool;
 
 typedef enum e_side { 
 	ROOT,
