@@ -186,7 +186,10 @@ int		ft_exec(t_btree *node, t_dico *dico);
 /* >>> Utils */
 void	echo_control_seq(t_bool c);
 char	*add_linefeed(char *str);
+
 void	rl_replace_line (const char *text, int clear_undo);
+void sig_handler(int n);
+void sig_handler1(int n);
 
 /* sanitize */
 char	*ft_sanitize(char *str);

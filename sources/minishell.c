@@ -2,20 +2,37 @@
 
 t_minishell g_minishell;
 
-static void sig_handler(int n)
+void sig_handler1(int n)
+{
+	if (n == SIGINT)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+    	rl_replace_line("",0);
+		close(0);
+	}
+	if (n == SIGQUIT)
+	{
+    	rl_replace_line("",0);
+		rl_on_new_line();
+    	rl_redisplay();
+	}
+}
+
+
+void sig_handler(int n)
 {
 	if (n == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);
 		rl_on_new_line();
     	rl_replace_line("",0); 
-    	//rl_redisplay();
+    	rl_redisplay();
 	}
 	if (n == SIGQUIT)
 	{
     	rl_replace_line("",0);
 		rl_on_new_line();
-    	//rl_redisplay();
+    	rl_redisplay();
 	}
 }
 
@@ -31,6 +48,7 @@ int main(int ac, char **argv, char **envp)
 	dico.sets = NULL;
 	dico.envp = NULL;
 	root = NULL;
+	echo_control_seq(FALSE);
 	ft_set_dico(&dico, envp);
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
