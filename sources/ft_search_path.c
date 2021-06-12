@@ -14,7 +14,6 @@ static t_bool	contains_slash(char *path)
 static char	*no_path(char *exec)
 {
 	int	fd;
-	printf("exec is %s\n", exec);
 
 	fd = open(exec, O_RDONLY);
 	if (fd == -1)
@@ -76,6 +75,7 @@ char	*ft_search_path(char *exec, char *path)
 		return (ft_strdup(no_path(exec)));
 	found = path_lookup(exec, path);
 	if (!found)
-		ft_error((const char *[]){_strerror(EEMPTY), exec, ": command not found\n", NULL}, FALSE);
+		ft_error((const char *[]){_strerror(EEMPTY),
+			exec, ": command not found\n", NULL}, FALSE);
 	return (found);
 }

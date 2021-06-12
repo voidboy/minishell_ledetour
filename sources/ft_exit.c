@@ -1,23 +1,31 @@
 #include "minishell.h"
 
-int ft_exit(t_btree *node, t_dico dico)
+static int	too_many_arguments(void)
 {
-	int i;
+	ft_error((const char *[]){_strerror(EEXIT),
+		"too many arguments\n", NULL}, FALSE);
+	return (1);
+}
 
-	(void)dico;
+static void	numeric_argument_required(char *arg)
+{
+	ft_error((const char *[]){_strerror(EEXIT), arg,
+		": numeric argument required\n", NULL}, FALSE);
+	exit(EXIT_ERR);
+}
+
+int	ft_exit(t_btree *node, t_dico *dico)
+{
+	int	i;
+
 	if (node->argv[1] && node->argv[2])
-	{
-		ft_error((const char *[]){_strerror(EEXIT),
-			"too many arguments\n", NULL}, FALSE);
-		return (1);
-	}
+		return (too_many_arguments());
 	else if (node->fd[0] == STDIN_FILENO && node->fd[1] == STDOUT_FILENO)
 	{
-		i = 0;
-		write(node->fd[1], "exit\n", 5);
+		i = write(node->fd[1], "exit\n", 5) - 5;
 		if (!node->argv[1])
 		{
-			ft_free(g_minishell.root, g_minishell.dico);
+			ft_free(g_minishell.root, dico);
 			exit(0);
 		}
 		while ((!i && (node->argv[1][i] == '-' || node->argv[1][i] == '+'))
@@ -25,12 +33,12 @@ int ft_exit(t_btree *node, t_dico dico)
 			i++;
 		if (node->argv[1][i] == '\0')
 		{
-			ft_free(g_minishell.root, g_minishell.dico);
-			exit(ft_atoi(node->argv[1]));
+			i = ft_atoi(node->argv[1]);
+			ft_free(g_minishell.root, dico);
+			exit(i);
 		}
-		else 
-			ft_error((const char *[]){_strerror(EEXIT), node->argv[1],
-				": numeric argument required\n", NULL}, FALSE);
+		else
+			numeric_argument_required(node->argv[1]);
 	}
 	return (0);
 }

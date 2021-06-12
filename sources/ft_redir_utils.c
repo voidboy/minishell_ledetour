@@ -37,12 +37,10 @@ t_bool	is_delimiter(char c)
 		return (FALSE);
 }
 
-t_bool is_redirection(char c)
+t_bool	is_redirection(char c)
 {
 	if (c == '<' || c == '>')
 		return (TRUE);
 	else
 		return (FALSE);
 }
-
-

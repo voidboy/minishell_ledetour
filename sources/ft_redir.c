@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static int add_redir(t_btree *node, char *filename, t_way way)
+static int	add_redir(t_btree *node, char *filename, t_way way)
 {
 	t_redir	*new_redir;
 	t_list	*new_list;
@@ -22,7 +22,7 @@ static int add_redir(t_btree *node, char *filename, t_way way)
 	return (SUCCESS);
 }
 
-static int extract_file(t_btree *node, int *i)
+static int	extract_file(t_btree *node, int *i)
 {
 	char		*filename;
 	int			j;
@@ -39,7 +39,7 @@ static int extract_file(t_btree *node, int *i)
 	{
 		if (is_context_free(c))
 			if (is_delimiter(node->cmd[*i]))
-				break ; 
+				break ;
 		filename[j++] = node->cmd[*i];
 		update_context(&c, node->cmd[*i]);
 		*i = *i + 1;
@@ -48,7 +48,21 @@ static int extract_file(t_btree *node, int *i)
 	return (add_redir(node, filename, redirT));
 }
 
-int ft_redir(t_btree *node)
+static int	epilog(t_btree *node, char *cmd_wo_redir, int i, int j)
+{
+	int	exit_code;
+
+	if (node->cmd[i] != '\0')
+		exit_code = ERROR;
+	else
+		exit_code = SUCCESS;
+	cmd_wo_redir[j] = '\0';
+	free(node->cmd);
+	node->cmd = cmd_wo_redir;
+	return (exit_code);
+}
+
+int	ft_redir(t_btree *node)
 {	
 	int			i;
 	int			j;
@@ -58,36 +72,16 @@ int ft_redir(t_btree *node)
 	init_context(&c);
 	j = 0;
 	i = 0;
-	/* MKO */
 	cmd_wo_redir = malloc(sizeof(char) * ft_strlen(node->cmd) + 1);
 	if (!cmd_wo_redir)
 		return (ft_error((const char *[]){_strerror(errno), NULL}, TRUE));
 	while (node->cmd[i])
 	{
 		if (is_context_free(c) && is_redirection(node->cmd[i]))
-		{
 			if (extract_file(node, &i) == ERROR)
 				break ;
-			update_context(&c, node->cmd[i]);
-		}
-		else 
-		{
-			update_context(&c, node->cmd[i]);
-			cmd_wo_redir[j++] = node->cmd[i++];
-		}
+		update_context(&c, node->cmd[i]);
+		cmd_wo_redir[j++] = node->cmd[i++];
 	}
-	cmd_wo_redir[j] = '\0';
-	//printf("node->cmd is %s\n", node->cmd);
-	if (node->cmd[i] != '\0')
-	{
-		free(node->cmd);
-		node->cmd = cmd_wo_redir;
-		return (ERROR);
-	}
-	else
-	 {	
-		free(node->cmd);
-		node->cmd = cmd_wo_redir;
-		return (SUCCESS);
-	}
+	return (epilog(node, cmd_wo_redir, i, j));
 }

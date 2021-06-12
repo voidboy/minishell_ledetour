@@ -24,7 +24,6 @@ int main(int ac, char **argv, char **envp)
 	t_btree	*root;
 	t_dico	dico;
    	int		prove;
-	struct termios conf;
 
 	(void)argv;
 	dico.sets = NULL;
