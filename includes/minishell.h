@@ -13,7 +13,8 @@
 # include <string.h>
 # include <signal.h>
 # include <sys/ioctl.h>
-# include <readline/readline.h>
+# define READLINE_LIBRARY
+# include "readline.h"
 # include "libft.h"
 
 # define EXIT_ERR		255
@@ -44,12 +45,13 @@ typedef enum e_way {
 }			t_way;
 
 typedef enum e_type {
+	POPEN,
+	PCLOSE,
 	SEMICOLON,
 	AND,
 	OR,
 	PIPE,
 	CMD,
-	NEWLINE,
 }			t_type;
 
 typedef enum e_scope {

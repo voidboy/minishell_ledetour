@@ -4,10 +4,20 @@ t_minishell g_minishell;
 
 static void sig_handler(int n)
 {
-	if (isatty(STDIN_FILENO))
-		echo_control_seq(FALSE);
 	if (n == SIGINT)
-		write(STDOUT_FILENO, "\nminishell> ", 12);
+	{
+		write(STDIN_FILENO,"\n",1); // Move to a new line
+    	rl_on_new_line(); // Regenerate the prompt on a newline
+    	rl_replace_line("", 0); // Clear the previous text
+		//printf("%d\n",ttyslot());
+		//rl_redisplay();
+	}
+	if (n == SIGQUIT)
+	{
+    	rl_replace_line("", 0); // Clear the previous text
+    	rl_on_new_line(); // Regenerate the prompt on a newline
+    	//rl_redisplay();
+	}
 }
 
 int main(int ac, char **argv, char **envp)
@@ -27,17 +37,20 @@ int main(int ac, char **argv, char **envp)
 	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
+		echo_control_seq(FALSE);
 		line = readline("minishell> ");
 		rl_on_new_line();
 		//printf("\nline : %s\n\n", line);
-		if (!ft_strlen(line))
+		if (!line)
 		{
 			/* we should free here */
 			write(STDOUT_FILENO, "exit\n", 5);
 			exit(0);
 		}
+		if (ft_strlen(line))
+			add_history(line);
 		root = ft_sow(line);
-		//btree_show(root);
+	//	btree_show(root);
 		prove = ft_prove(root);
 		ft_open_her_doc(root);
 		if ( prove != -1 )
