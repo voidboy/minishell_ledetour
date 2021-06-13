@@ -11,9 +11,7 @@ void	ft_here_doc_read(void *_node)
 	if (!node->delimiter)
 		return ;
 	line = NULL;
-	echo_control_seq(FALSE);
-	signal(SIGINT, sig_handler1);
-	signal(SIGQUIT, sig_handler1);
+	sig_apply(HERE_OPEN);
 	i = dup(STDIN_FILENO);
 	while (1)
 	{
@@ -36,9 +34,7 @@ void	ft_here_doc_read(void *_node)
 		free(line);
 	}
 	dup2(i, STDIN_FILENO);
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, sig_handler);
-	echo_control_seq(TRUE);
+	sig_apply(PARENT);
 }
 
 int	ft_here_doc_open(t_btree *root)
