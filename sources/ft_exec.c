@@ -62,7 +62,6 @@ static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
 		wait(&exit_code);
 		lookup_child(&exit_code);
 	}
-	ft_cleanup_fd(node);
 	free(full_path);
 	return (exit_code);
 }
