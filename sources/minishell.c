@@ -8,11 +8,10 @@ void sig_handler1(int n)
 	{
 		write(STDOUT_FILENO, "\n", 1);
     	rl_replace_line("",0);
-		close(0);
+		close(STDIN_FILENO);
 	}
 	if (n == SIGQUIT)
 	{
-    	rl_replace_line("",0);
 		rl_on_new_line();
     	rl_redisplay();
 	}
@@ -30,7 +29,6 @@ void sig_handler(int n)
 	}
 	if (n == SIGQUIT)
 	{
-    	rl_replace_line("",0);
 		rl_on_new_line();
     	rl_redisplay();
 	}
@@ -62,10 +60,12 @@ int main(int ac, char **argv, char **envp)
 			write(STDOUT_FILENO, "exit\n", 5);
 			exit(0);
 		}
+		if (ft_strlen(line))
+			add_history(line);
 		root = ft_sow(line);
 		//btree_show(root);
 		prove = ft_prove(root);
-		ft_open_her_doc(root);
+		ft_here_doc_open(root);
 		if ( prove != -1 )
 		{
 			ft_cross(root, &dico);

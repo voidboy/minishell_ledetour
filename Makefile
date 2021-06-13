@@ -30,7 +30,7 @@ SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_unset.c \
 			sources/ft_env.c \
 			sources/minishell.c \
-			sources/ft_open_her_doc.c \
+			sources/ft_here_doc_open.c \
 			tests/btree_show.c \
 			tests/dico_show.c \
 

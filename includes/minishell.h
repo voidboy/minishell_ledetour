@@ -163,7 +163,7 @@ t_btree	*ft_sow(char *line);
 int		ft_prove(t_btree *root);
 
 /* her doc */
-int		ft_open_her_doc(t_btree *root);
+int		ft_here_doc_open(t_btree *root);
 
 /* commands lookup INFIX */
 int		ft_cross(t_btree *root, t_dico *dico);
