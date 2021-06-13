@@ -17,6 +17,7 @@
 # include <readline/readline.h>
 # include "libft.h"
 
+# define PARSE_ERR		258
 # define EXIT_ERR		255
 # define CMD_FOUND_NX	126
 # define CMD_NFOUND		127

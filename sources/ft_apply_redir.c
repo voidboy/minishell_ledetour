@@ -61,11 +61,12 @@ static int	expand_filename(t_redir *redir, t_dico *dico)
 	filename = strdup(redir->filename);
 	if (!filename)
 		ft_error((const char *[]){_strerror(errno), "\n"}, TRUE);
+	if (*filename == '$')
+		ft_error((const char *[]){_strerror(EEMPTY), filename,
+			": ambiguous redirect\n", NULL}, FALSE);
 	redir->filename = ft_expander(redir->filename, dico);
 	if (!*redir->filename)
 	{
-		ft_error((const char *[]){_strerror(EEMPTY), filename,
-			": ambiguous redirect\n", NULL}, FALSE);
 		free(filename);
 		return (1);
 	}

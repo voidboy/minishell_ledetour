@@ -34,13 +34,11 @@ static void	lookup_child(int *exit_code)
 	if (WIFSIGNALED(*exit_code))
 	{
 		if (WTERMSIG(*exit_code) == SIGQUIT)
-		{
 			write(STDERR_FILENO, "Quit: 3\n", 8);
-			*exit_code = SIG_TERM_NUM + WTERMSIG(*exit_code);
-		}
-		else
-			*exit_code = WEXITSTATUS(*exit_code);
+		*exit_code = SIG_TERM_NUM + WTERMSIG(*exit_code);
 	}
+	else 
+		*exit_code = WEXITSTATUS(*exit_code);
 }
 
 static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
@@ -70,7 +68,7 @@ static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
 	return (exit_code);
 }
 
-static char	ft_exec_cmd(t_btree *node, t_dico *dico)
+static int	ft_exec_cmd(t_btree *node, t_dico *dico)
 {
 	char	*full_path;
 	int		exit_code;

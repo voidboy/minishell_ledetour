@@ -27,7 +27,11 @@ int	ft_execute_node(t_btree *node, t_dico *dico)
 int	ft_cross(t_btree *root, t_dico *dico)
 {
 	static int	code_return;
+	char		*str_return;
 
+	str_return = ft_get_dico_value("?", dico);
+	code_return = ft_atoi(str_return);
+	free(str_return);
 	if (root)
 	{
 		code_return = ft_cross(root->left, dico);
