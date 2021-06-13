@@ -15,7 +15,6 @@ void sig_apply(t_stage stage)
 
 void sig_hand_child(int n)
 {
-	echo_control_seq(TRUE);
 	if (n == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);
@@ -30,7 +29,6 @@ void sig_hand_child(int n)
 
 void sig_hand_here(int n)
 {
-	echo_control_seq(FALSE);
 	if (n == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);
@@ -46,7 +44,6 @@ void sig_hand_here(int n)
 
 void sig_hand_parent(int n)
 {
-	echo_control_seq(FALSE);
 	if (n == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);

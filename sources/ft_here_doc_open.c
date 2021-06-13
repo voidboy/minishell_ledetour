@@ -11,6 +11,7 @@ void	ft_here_doc_read(void *_node)
 	if (!node->delimiter)
 		return ;
 	line = NULL;
+	echo_control_seq(FALSE);
 	sig_apply(HERE_OPEN);
 	i = dup(STDIN_FILENO);
 	while (1)
