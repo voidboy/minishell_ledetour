@@ -13,6 +13,7 @@
 # include <string.h>
 # include <signal.h>
 # include <sys/ioctl.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include "libft.h"
 

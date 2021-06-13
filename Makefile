@@ -2,8 +2,8 @@ NAME	=	minishell
 
 # -------  ADD -Werror ! -------
 
-FLAG	= 	-g -ggdb -Wall -Wextra -I ./includes -I ./libft/
-FLAG 	+=	-fsanitize=address
+FLAG	= 	-Wall -Wextra -I ./includes -I ./libft/
+#FLAG 	+=	-g -ggdb -fsanitize=address
 SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_assign.c \
 			sources/ft_break.c \
@@ -33,6 +33,8 @@ SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_here_doc_open.c \
 			tests/btree_show.c \
 			tests/dico_show.c \
+
+CC		=	gcc
 
 OBJS	=	$(SRCS:.c=.o)
 
