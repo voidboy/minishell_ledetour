@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern t_minishell	g_minishell;
+
 static int	too_many_arguments(void)
 {
 	ft_error((const char *[]){_strerror(EEXIT),

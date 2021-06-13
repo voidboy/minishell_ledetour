@@ -2,21 +2,59 @@
 
 t_minishell g_minishell;
 
-static void sig_handler(int n)
+void sig_apply(t_stage stage)
+{
+	void (*ptr_hendler)(int n);
+	void **fcts;
+
+	fcts = (void *[]){&sig_hand_parent, &sig_hand_here, &sig_hand_child};
+	ptr_hendler = fcts[stage];
+	signal(SIGINT, ptr_hendler);
+	signal(SIGQUIT, ptr_hendler);
+}
+
+void sig_hand_child(int n)
 {
 	if (n == SIGINT)
 	{
-		write(STDIN_FILENO,"\n",1); // Move to a new line
-    	rl_on_new_line(); // Regenerate the prompt on a newline
-    	rl_replace_line("", 0); // Clear the previous text
-		//printf("%d\n",ttyslot());
-		//rl_redisplay();
+		write(STDOUT_FILENO, "\n", 1);
+		rl_on_new_line();
+    	rl_replace_line("",0); 
 	}
 	if (n == SIGQUIT)
 	{
-    	rl_replace_line("", 0); // Clear the previous text
-    	rl_on_new_line(); // Regenerate the prompt on a newline
-    	//rl_redisplay();
+		rl_on_new_line();
+	}
+}
+
+void sig_hand_here(int n)
+{
+	if (n == SIGINT)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+    	rl_replace_line("",0);
+		close(STDIN_FILENO);
+	}
+	if (n == SIGQUIT)
+	{
+		rl_on_new_line();
+    	rl_redisplay();
+	}
+}
+
+void sig_hand_parent(int n)
+{
+	if (n == SIGINT)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		rl_on_new_line();
+    	rl_replace_line("",0); 
+    	rl_redisplay();
+	}
+	if (n == SIGQUIT)
+	{
+		rl_on_new_line();
+    	rl_redisplay();
 	}
 }
 
@@ -32,15 +70,14 @@ int main(int ac, char **argv, char **envp)
 	dico.sets = NULL;
 	dico.envp = NULL;
 	root = NULL;
+	echo_control_seq(FALSE);
+	sig_apply(PARENT);
 	ft_set_dico(&dico, envp);
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
 		echo_control_seq(FALSE);
 		line = readline("minishell> ");
-		rl_on_new_line();
-		//printf("\nline : %s\n\n", line);
+	//	printf("\nline : {%s}\n\n", line);
 		if (!line)
 		{
 			/* we should free here */
@@ -52,7 +89,7 @@ int main(int ac, char **argv, char **envp)
 		root = ft_sow(line);
 	//	btree_show(root);
 		prove = ft_prove(root);
-		ft_open_her_doc(root);
+		ft_here_doc_open(root);
 		if ( prove != -1 )
 		{
 			ft_cross(root, &dico);

@@ -3,5 +3,5 @@
 *.swp
 minishell
 *.dSYM
-*.a
+libft.a
 a.out

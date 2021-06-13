@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern t_minishell	g_minishell;
+
 int	ft_free_strs(char **strs)
 {
 	int	i;

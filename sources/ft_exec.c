@@ -16,6 +16,7 @@ void	ft_cleanup_fd(t_btree *node)
 
 static void	setup_child(char *full_path, t_btree *node, t_dico *dico)
 {
+
 	echo_control_seq(TRUE);
 	dup2(node->fd[0], STDIN_FILENO);
 	dup2(node->fd[1], STDOUT_FILENO);
@@ -59,11 +60,13 @@ static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
 	}
 	if (!exit_code)
 	{
+		sig_apply(CHILD);
 		wait(&exit_code);
+		sig_apply(PARENT);
+		echo_control_seq(FALSE);
 		lookup_child(&exit_code);
 	}
 	free(full_path);
-	ft_cleanup_fd(node);
 	return (exit_code);
 }
 

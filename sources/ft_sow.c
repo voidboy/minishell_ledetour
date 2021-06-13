@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern t_minishell	g_minishell;
+
 char	*ft_cmdtrim(char *s)
 {
 	int		start;
@@ -156,6 +158,7 @@ t_btree	*ft_wrap_sow(char *line, t_btree *parent, t_side side)
 
 t_btree	*ft_sow(char *line)
 {
+	line = add_linefeed(line);
 	g_minishell.root = ft_wrap_sow(line, NULL, ROOT);
 	return (g_minishell.root);
 }

@@ -13,8 +13,8 @@
 # include <string.h>
 # include <signal.h>
 # include <sys/ioctl.h>
-# define READLINE_LIBRARY
-# include "readline.h"
+# include <sys/stat.h>
+# include <readline/readline.h>
 # include "libft.h"
 
 # define EXIT_ERR		255
@@ -52,6 +52,7 @@ typedef enum e_type {
 	OR,
 	PIPE,
 	CMD,
+	NEWLINE,
 }			t_type;
 
 typedef enum e_scope {
@@ -77,6 +78,13 @@ typedef enum e_side {
 	RIGHT,
 }			t_side;
 
+typedef enum e_stage{
+	PARENT,
+	HERE_OPEN,
+	CHILD,
+}			t_stage;
+
+
 typedef struct s_context {
 	t_bool	inside_Squote;
 	t_bool	inside_Dquote;
@@ -101,7 +109,6 @@ typedef struct s_btree {
 	int				fd[2];
 	char			*buff;
 	char			*delimiter;
-	int				pid;
 }				t_btree;
 
 typedef struct s_var {
@@ -128,8 +135,7 @@ typedef struct s_minishell
 	t_dico	*dico;
 }				t_minishell;
 
-typedef const char *t_strs[];
-extern t_minishell	g_minishell;
+typedef const char	*t_strs[];
 
 /* >>> Gestion erreur */
 int		ft_error(const char *msg[], t_bool is_fatal);
@@ -167,7 +173,7 @@ t_btree	*ft_sow(char *line);
 int		ft_prove(t_btree *root);
 
 /* her doc */
-int		ft_open_her_doc(t_btree *root);
+int		ft_here_doc_open(t_btree *root);
 
 /* commands lookup INFIX */
 int		ft_cross(t_btree *root, t_dico *dico);
@@ -189,6 +195,14 @@ int		ft_exec(t_btree *node, t_dico *dico);
 
 /* >>> Utils */
 void	echo_control_seq(t_bool c);
+char	*add_linefeed(char *str);
+
+void	rl_replace_line (const char *text, int clear_undo);
+void	sig_hand_child(int n);
+void	sig_hand_parent(int n);
+void	sig_hand_here(int n);
+void	sig_apply(t_stage stage);
+
 
 /* sanitize */
 char	*ft_sanitize(char *str);
