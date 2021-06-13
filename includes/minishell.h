@@ -75,6 +75,13 @@ typedef enum e_side {
 	RIGHT,
 }			t_side;
 
+typedef enum e_stage{
+	PARENT,
+	HERE_OPEN,
+	CHILD,
+}			t_stage;
+
+
 typedef struct s_context {
 	t_bool	inside_Squote;
 	t_bool	inside_Dquote;
@@ -188,8 +195,11 @@ void	echo_control_seq(t_bool c);
 char	*add_linefeed(char *str);
 
 void	rl_replace_line (const char *text, int clear_undo);
-void sig_handler(int n);
-void sig_handler1(int n);
+void	sig_hand_child(int n);
+void	sig_hand_parent(int n);
+void	sig_hand_here(int n);
+void	sig_apply(t_stage stage);
+
 
 /* sanitize */
 char	*ft_sanitize(char *str);

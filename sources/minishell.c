@@ -2,7 +2,32 @@
 
 t_minishell g_minishell;
 
-void sig_handler1(int n)
+void sig_apply(t_stage stage)
+{
+	void (*ptr_hendler)(int n);
+	void **fcts;
+
+	fcts = (void *[]){&sig_hand_parent, &sig_hand_here, &sig_hand_child};
+	ptr_hendler = fcts[stage];
+	signal(SIGINT, ptr_hendler);
+	signal(SIGQUIT, ptr_hendler);
+}
+
+void sig_hand_child(int n)
+{
+	if (n == SIGINT)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		rl_on_new_line();
+    	rl_replace_line("",0); 
+	}
+	if (n == SIGQUIT)
+	{
+		rl_on_new_line();
+	}
+}
+
+void sig_hand_here(int n)
 {
 	if (n == SIGINT)
 	{
@@ -17,8 +42,7 @@ void sig_handler1(int n)
 	}
 }
 
-
-void sig_handler(int n)
+void sig_hand_parent(int n)
 {
 	if (n == SIGINT)
 	{
@@ -47,9 +71,8 @@ int main(int ac, char **argv, char **envp)
 	dico.envp = NULL;
 	root = NULL;
 	echo_control_seq(FALSE);
+	sig_apply(PARENT);
 	ft_set_dico(&dico, envp);
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
 		line = readline("minishell> ");
