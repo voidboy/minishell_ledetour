@@ -78,10 +78,16 @@ int	ft_redir(t_btree *node)
 	while (node->cmd[i])
 	{
 		if (is_context_free(c) && is_redirection(node->cmd[i]))
+		{
 			if (extract_file(node, &i) == ERROR)
 				break ;
-		update_context(&c, node->cmd[i]);
-		cmd_wo_redir[j++] = node->cmd[i++];
+			update_context(&c, node->cmd[i]);
+		}
+		else 
+		{
+			update_context(&c, node->cmd[i]);
+			cmd_wo_redir[j++] = node->cmd[i++];
+		}
 	}
 	return (epilog(node, cmd_wo_redir, i, j));
 }
