@@ -83,21 +83,18 @@ static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
 	else if (pid == -1)
 	{
 		free(full_path);
-		exit_code = 1;
-		ft_error((const char *[]){_strerror(EEMPTY), "fork: ", _strerror(errno), "\n", NULL}, FALSE);
+		ft_error((const char *[]){_strerror(EEMPTY), \
+				"fork: ", _strerror(errno), "\n", NULL}, FALSE);
 		ft_cleanup_parent(node);
 		return (EXIT_FORK);
 	}
 	ft_cleanup_parent(node);
-	if (!exit_code)
+	if (!exit_code && node->fd[1] == STDOUT_FILENO)
 	{
-		if(node->fd[1] == STDOUT_FILENO)
-		{
-			sig_apply(CHILD);
-			wait(&exit_code);
-			sig_apply(PARENT);
-			lookup_child(&exit_code);
-		}
+		sig_apply(CHILD);
+		wait(&exit_code);
+		sig_apply(PARENT);
+		lookup_child(&exit_code);
 	}
 	free(full_path);
 	return (exit_code);

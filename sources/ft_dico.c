@@ -185,7 +185,6 @@ int	ft_sets_size_global(t_list *lst)
 int	ft_set_envp(t_dico *dico)
 {
 	t_list	*sets;
-	t_var	*var;
 	int		len;
 	char	*tmp;
 
@@ -199,12 +198,12 @@ int	ft_set_envp(t_dico *dico)
 	len = -1;
 	while (sets)
 	{
-		var = sets->content;
-		if (var->scope == GLOBAL)
+		if (((t_var *)sets->content)->scope == GLOBAL)
 		{
-			dico->envp[++len] = ft_strjoin(var->key, "=");
+			dico->envp[++len] = ft_strjoin(((t_var *)sets->content)->key, "=");
 			tmp = dico->envp[len];
-			dico->envp[len] = ft_strjoin(dico->envp[len], var->value);
+			dico->envp[len] = ft_strjoin(dico->envp[len], \
+					((t_var *)sets->content)->value);
 			free(tmp);
 		}
 		sets = sets->next;
@@ -228,7 +227,8 @@ int	ft_set_dico(t_dico *dico, char **envp)
 	ft_new_dico_var(ft_strdup("?"), ft_strdup("0"), LOCAL, dico);
 	ft_rm_dico_var("OLDPWD", dico);
 	tmp = ft_get_dico_value("SHLVL", dico);
-	ft_set_dico_value(ft_strdup("SHLVL"), ft_itoa(ft_atoi(tmp)+1), GLOBAL, dico);
+	ft_set_dico_value(ft_strdup("SHLVL"), \
+			ft_itoa(ft_atoi(tmp)+1), GLOBAL, dico);
 	free(tmp);
 	g_minishell.dico = dico;
 	return (0);
