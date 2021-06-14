@@ -6,12 +6,12 @@ void ft_cleanup_parent(t_btree *node)
 		{
 		if (node->side == LEFT)
 		{
-			if(node->parent->fd[1] != STDOUT_FILENO)
+			if (node->parent->fd[1] != STDOUT_FILENO)
 				close(node->parent->fd[1]);
 		}
 		else if (node->side == RIGHT)
 		{
-			if(node->parent->fd[0] != STDIN_FILENO)
+			if (node->parent->fd[0] != STDIN_FILENO)
 				close(node->parent->fd[0]);
 			if (node->parent->parent && node->parent->parent->type == PIPE)
 			{
@@ -28,16 +28,16 @@ if (node->parent && node->parent->type == PIPE)
 	{
 		if (node->side == LEFT)
 		{
-			if(node->parent->fd[0] != STDIN_FILENO)
+			if (node->parent->fd[0] != STDIN_FILENO)
 				close(node->parent->fd[0]);
 		}
 		else if (node->side == RIGHT)
 		{
-			if(node->parent->fd[1] != STDOUT_FILENO)
+			if (node->parent->fd[1] != STDOUT_FILENO)
 				close(node->parent->fd[1]);
 			if (node->parent->parent && node->parent->parent->type == PIPE)
 			{
-				if(node->parent->parent->fd[0] != STDIN_FILENO)
+				if (node->parent->parent->fd[0] != STDIN_FILENO)
 					close(node->parent->parent->fd[0]);
 			}
 		}
@@ -84,7 +84,9 @@ static int	launch_cmd(char *full_path, t_btree *node, t_dico *dico)
 	{
 		free(full_path);
 		exit_code = 1;
-		ft_error((const char *[]){_strerror(errno), "\n", NULL}, TRUE);
+		ft_error((const char *[]){_strerror(EEMPTY), "fork: ", _strerror(errno), "\n", NULL}, FALSE);
+		ft_cleanup_parent(node);
+		return (EXIT_FORK);
 	}
 	ft_cleanup_parent(node);
 	if (!exit_code)
@@ -148,10 +150,12 @@ int	ft_exec(t_btree *node, t_dico *dico)
 
 	if (node->cmd == NULL)
 	{
+		ft_cleanup_parent(node);
 		return (0);
 	}
 	if (!*node->cmd)
 	{
+		ft_cleanup_parent(node);
 		ft_error((const char *[]){_strerror(EEMPTY), \
 				": command not found\n", NULL}, FALSE);
 		return (CMD_NFOUND);

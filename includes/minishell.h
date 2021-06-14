@@ -22,6 +22,7 @@
 # define CMD_FOUND_NX	126
 # define CMD_NFOUND		127
 # define SIG_TERM_NUM	128
+# define EXIT_FORK		300
 # define ERROR			-1
 # define SUCCESS		0
 # define FAILURE		1
@@ -167,6 +168,7 @@ int		ft_set_envp(t_dico *dico);
 
 /* tree building  */
 t_btree	*ft_sow(char *line);
+t_btree	*root_node(t_btree *node);
 
 /* syntax verification */
 int		ft_prove(t_btree *root);
