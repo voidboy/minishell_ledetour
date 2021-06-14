@@ -18,7 +18,7 @@ static void	numeric_argument_required(char *arg)
 
 int	ft_exit(t_btree *node, t_dico *dico)
 {
-	int	i;
+	long long i;
 
 	if (node->argv[1] && node->argv[2])
 		return (too_many_arguments());
@@ -33,9 +33,8 @@ int	ft_exit(t_btree *node, t_dico *dico)
 		while ((!i && (node->argv[1][i] == '-' || node->argv[1][i] == '+'))
 			|| ft_isdigit(node->argv[1][i]))
 			i++;
-		if (node->argv[1][i] == '\0')
+		if (node->argv[1][i] == '\0' && ft_tolong(node->argv[1], &i))
 		{
-			i = ft_atoi(node->argv[1]);
 			ft_free(g_minishell.root, dico);
 			exit(i);
 		}

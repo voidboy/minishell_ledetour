@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include <limits.h>
 
 void	echo_control_seq(t_bool c)
 {
@@ -22,7 +23,7 @@ char	*add_linefeed(char *str)
 	return (str);
 }
 
-int	ft_tolong(const char *str, int *nb)
+int	ft_tolong(const char *str, long long *nb)
 {
 	int					sign;
 	unsigned long long	num;
@@ -42,7 +43,7 @@ int	ft_tolong(const char *str, int *nb)
 		if (!ft_isdigit(*str))
 			return (0);
 		num = (num * 10) + (*str - 48);
-		if ((sign < 0 && num > 9223372036854775808) || (sign > 0 && num > 9223372036854775807))
+		if ((sign < 0 && num > ((unsigned long long)LLONG_MAX + 1)) || (sign > 0 && num > LLONG_MAX))
 			return (0);
 		str++;
 	}

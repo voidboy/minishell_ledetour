@@ -195,6 +195,7 @@ int		ft_exec(t_btree *node, t_dico *dico);
 /* >>> Utils */
 void	echo_control_seq(t_bool c);
 char	*add_linefeed(char *str);
+int		ft_tolong(const char *str, long long *nb);
 
 void	rl_replace_line (const char *text, int clear_undo);
 void	sig_hand_child(int n);
