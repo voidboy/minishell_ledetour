@@ -78,7 +78,6 @@ int main(int ac, char **argv, char **envp)
 	{
 		echo_control_seq(FALSE);
 		line = readline("minishell> ");
-	//	printf("\nline : {%s}\n\n", line);
 		if (!line)
 		{
 			/* we should free here */
@@ -87,9 +86,8 @@ int main(int ac, char **argv, char **envp)
 		}
 		if (ft_strlen(line))
 			add_history(line);
-		line = add_linefeed(line);
 		root = ft_sow(line);
-		btree_show(root);
+		//btree_show(root);
 		prove = ft_prove(root);
 		ft_here_doc_open(root);
 		if (prove != -1)
