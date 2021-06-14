@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_var	*ft_str_to_varplus(char *str)
+t_var	*ft_str_to_varplus(char *str, int *plus)
 {
 	t_var	*var;
 	int		i;
@@ -9,7 +9,7 @@ t_var	*ft_str_to_varplus(char *str)
 	var = NULL;
 	while (str[++i] && str[i] != '+')
 		;
-	if (str[i] && str[i] == '+' && str[i+1] == '=')
+	if (str[i] && str[i] == '+' && str[i + 1] == '=')
 	{
 		var = malloc(sizeof(t_var));
 		if (!var)
@@ -17,29 +17,32 @@ t_var	*ft_str_to_varplus(char *str)
 		var->key = ft_substr(str, 0, i);
 		var->value = ft_substr(str, i + 2, ft_strlen(str) - i - 1);
 		var->scope = GLOBAL;
+		*plus = 1;
 	}
 	return (var);
 }
 
-
-void	ft_export_var(t_var *var, char *arg, t_dico *dico, int plus)
+void	ft_join_var(t_var *var, t_dico *dico)
 {
 	char	*tmp1;
 	char	*tmp2;
 
+	tmp1 = ft_get_dico_value(var->key, dico);
+	tmp2 = var->value;
+	var->value = ft_strjoin(tmp1, tmp2);
+	free(tmp1);
+	free(tmp2);
+	ft_set_dico_value(var->key, var->value, GLOBAL, dico);
+}
+
+void	ft_export_var(t_var *var, char *arg, t_dico *dico, int plus)
+{
 	if (ft_strchr(arg, '='))
 	{
 		if (!plus)
 			ft_set_dico_value(var->key, var->value, GLOBAL, dico);
 		else
-		{
-			tmp1 = ft_get_dico_value(var->key, dico);
-			tmp2 = var->value;
-			var->value = ft_strjoin(tmp1, tmp2);
-			free(tmp1);
-			free(tmp2);	
-			ft_set_dico_value(var->key, var->value, GLOBAL, dico);
-		}
+			ft_join_var(var, dico);
 	}
 	else
 	{
@@ -50,6 +53,14 @@ void	ft_export_var(t_var *var, char *arg, t_dico *dico, int plus)
 		else
 			ft_set_dico_value(ft_strdup(arg), NULL, EXPORT, dico);
 	}
+	free(var);
+}
+
+void	ft_print_export_error(char *str, int *code_return)
+{
+	ft_error((const char *[]){_strerror(EEXPORT), \
+					"`", str, "': not a valid identifier\n", NULL}, FALSE);
+	*code_return = 1;
 }
 
 int	ft_export(t_btree *node, t_dico *dico)
@@ -70,22 +81,11 @@ int	ft_export(t_btree *node, t_dico *dico)
 		if (**argv)
 			var = ft_str_to_var(*argv, 1);
 		if (**argv && !var)
-		{
-			var = ft_str_to_varplus(*argv);
-			if (var)
-				plus = 1;
-		}
+			var = ft_str_to_varplus(*argv, &plus);
 		if (var)
-		{
 			ft_export_var(var, *argv, dico, plus);
-			free(var);
-		}
 		else
-		{
-			ft_error((const char *[]){_strerror(EEXPORT), \
-					"`", *argv, "': not a valid identifier\n", NULL}, FALSE);
-			code_return = 1;
-		}
+			ft_print_export_error(*argv, &code_return);
 		argv++;
 	}
 	return (code_return);
