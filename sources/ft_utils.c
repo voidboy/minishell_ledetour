@@ -21,3 +21,31 @@ char	*add_linefeed(char *str)
 	free(tmp);
 	return (str);
 }
+
+int	ft_tolong(const char *str, int *nb)
+{
+	int					sign;
+	unsigned long long	num;
+
+	sign = 1;
+	num = 0;
+	if (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+			sign = -1;
+		str++;
+	}
+	if (!*str)
+		return (0);
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+			return (0);
+		num = (num * 10) + (*str - 48);
+		if ((sign < 0 && num > 9223372036854775808) || (sign > 0 && num > 9223372036854775807))
+			return (0);
+		str++;
+	}
+	*nb = num * sign;
+	return (1);
+}

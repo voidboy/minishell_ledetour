@@ -92,6 +92,10 @@ int main(int ac, char **argv, char **envp)
 		if (prove != -1)
 		{
 			ft_cross(root, &dico);
+			sig_apply(CHILD);
+			while(wait(NULL)!=-1)
+				;
+			sig_apply(PARENT);
 			//btree_show(root);
 			//ft_lstiter(dico.sets, ft_show_dico);
 		}
