@@ -41,7 +41,8 @@ int	ft_cross(t_btree *root, t_dico *dico)
 			code_return = ft_execute_node(root, dico);
 			ft_set_vars(root, dico, code_return);
 		}
-		else if (code_return != EXIT_FORK && !((root->type == OR && code_return == 0) \
+		else if (code_return != EXIT_FORK \
+				&& !((root->type == OR && code_return == 0) \
 						|| (root->type == AND && code_return != 0 )))
 		{
 			code_return = ft_cross(root->right, dico);

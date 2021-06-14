@@ -16,10 +16,21 @@ static void	numeric_argument_required(char *arg)
 	exit(EXIT_ERR);
 }
 
+static int ft_last_return(t_btree *root, t_dico *dico)
+{
+	int		i;
+	char	*tmp;
+
+	tmp = ft_get_dico_value("?", dico);
+	i = ft_atoi(tmp);
+	free(tmp);
+	ft_free(root, dico);
+	return (i);
+}
+
 int	ft_exit(t_btree *node, t_dico *dico)
 {
 	long long i;
-	char *tmp;
 
 	if (node->argv[1] && node->argv[2])
 		return (too_many_arguments());
@@ -27,13 +38,7 @@ int	ft_exit(t_btree *node, t_dico *dico)
 	{
 		i = write(node->fd[1], "exit\n", 5) - 5;
 		if (!node->argv[1])
-		{
-			tmp = ft_get_dico_value("?", dico);
-			i = ft_atoi(tmp);
-			free(tmp);
-			ft_free(g_minishell.root, dico);
-			exit(i);
-		}
+			exit(ft_last_return(g_minishell.root, dico));
 		while ((!i && (node->argv[1][i] == '-' || node->argv[1][i] == '+'))
 			|| ft_isdigit(node->argv[1][i]))
 			i++;
