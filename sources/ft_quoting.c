@@ -11,7 +11,7 @@ int	ft_dbl_quoting(char *str, int *i, char *newstr)
 		while (str[*i] && str[*i] != '\"')
 		{
 			if (str[*i] && str[*i] == '\\' && (str[*i+1] == '\\' || \
-						str[*i+1] == '\"' || str[*i+1] == '\'' || str[*i+1] == '$'))
+						str[*i+1] == '\"' || str[*i+1] == '$'))
 				(*i)++;
 			if (str[*i])
 			{
