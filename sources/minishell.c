@@ -50,6 +50,7 @@ void sig_hand_parent(int n)
 		rl_on_new_line();
     	rl_replace_line("",0); 
     	rl_redisplay();
+		ft_set_dico_value(ft_strdup("?"), ft_strdup("1") , LOCAL, g_minishell.dico);
 	}
 	if (n == SIGQUIT)
 	{
@@ -92,7 +93,7 @@ int main(int ac, char **argv, char **envp)
 		ft_here_doc_open(root);
 		if (prove != -1)
 		{
-			if (ft_cross(root, &dico) == 300)
+			if (ft_cross(root, &dico) == EXIT_FORK)
 				ft_set_dico_value(ft_strdup("?"), ft_strdup("1") , LOCAL, &dico);
 			sig_apply(CHILD);
 			while(wait(NULL)!=-1)
