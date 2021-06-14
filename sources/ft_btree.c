@@ -42,3 +42,10 @@ t_btree	*rightest_node(t_btree *root)
 			return (rightest_node(root->right));
 	return (root);
 }
+
+t_btree	*root_node(t_btree *node)
+{
+	if (node && node->parent)
+		return root_node(node->parent);
+	return (node);
+}

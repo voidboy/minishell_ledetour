@@ -6,7 +6,7 @@
 /*   By: etakouer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 08:23:26 by etakouer          #+#    #+#             */
-/*   Updated: 2021/03/26 10:38:37 by etakouer         ###   ########.fr       */
+/*   Updated: 2021/06/14 15:16:15 by etakouer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	ft_atoi(const char *str)
 
 	sign = 1;
 	num = 0;
+	if (!str)
+		return (num);
 	while ((*str > 8 && *str < 14) || *str == ' ')
 		str++;
 	if (*str == '-' || *str == '+')

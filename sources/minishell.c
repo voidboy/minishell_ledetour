@@ -50,6 +50,7 @@ void sig_hand_parent(int n)
 		rl_on_new_line();
     	rl_replace_line("",0); 
     	rl_redisplay();
+		ft_set_dico_value(ft_strdup("?"), ft_strdup("1") , LOCAL, g_minishell.dico);
 	}
 	if (n == SIGQUIT)
 	{
@@ -75,8 +76,8 @@ int main(int ac, char **argv, char **envp)
 	ft_set_dico(&dico, envp);
 	while (1)
 	{
+		echo_control_seq(FALSE);
 		line = readline("minishell> ");
-	//	printf("\nline : {%s}\n\n", line);
 		if (!line)
 		{
 			/* we should free here */
@@ -91,11 +92,13 @@ int main(int ac, char **argv, char **envp)
 		ft_here_doc_open(root);
 		if (prove != -1)
 		{
-			ft_cross(root, &dico);
+			if (ft_cross(root, &dico) == EXIT_FORK)
+				ft_set_dico_value(ft_strdup("?"), ft_strdup("1") , LOCAL, &dico);
 			sig_apply(CHILD);
 			while(wait(NULL)!=-1)
 				;
 			sig_apply(PARENT);
+			echo_control_seq(FALSE);
 			//btree_show(root);
 			//ft_lstiter(dico.sets, ft_show_dico);
 		}

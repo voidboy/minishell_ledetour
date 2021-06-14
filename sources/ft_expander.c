@@ -1,5 +1,30 @@
 #include "minishell.h"
 
+char	*ft_escape_exp(char *str)
+{
+	char	*new;
+	int		i;
+	int		j;
+
+	i = -1;
+	j = 0;
+	while(str[++i])
+		if (str[i] == '\\' || str[i] == '\"' || str[i] == '\'')
+			j++;
+	new = malloc(sizeof(char) * ft_strlen(str) + 1 + j);
+	i = -1;
+	j = -1;
+	while (str && str[++i])
+	{
+		if (str[i] == '\\' || str[i] == '\"' || str[i] == '\'')
+			new[++j] = '\\';
+		new[++j] = str[i];
+	}
+	new[++j] = 0;
+	free(str);
+	return (new);
+}
+
 static t_bool	is_expension(char *str, int i)
 {
 	if (str[i] == '~')
@@ -135,7 +160,7 @@ static void	replace_expension(char **expanded, t_dico *dico)
 			else
 				value = ft_get_dico_value(expanded[i] + 1, dico);
 			free(expanded[i]);
-			expanded[i] = value;
+			expanded[i] = ft_escape_exp(value);
 		}
 		else
 			expanded[i] = expanded[i];
