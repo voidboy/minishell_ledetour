@@ -87,8 +87,9 @@ int main(int ac, char **argv, char **envp)
 		}
 		if (ft_strlen(line))
 			add_history(line);
+		line = add_linefeed(line);
 		root = ft_sow(line);
-	//	btree_show(root);
+		btree_show(root);
 		prove = ft_prove(root);
 		ft_here_doc_open(root);
 		if (prove != -1)
