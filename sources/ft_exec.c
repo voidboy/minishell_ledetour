@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-void ft_cleanup_parent(t_btree *node)
+void	ft_cleanup_parent(t_btree *node)
 {
 	if (node->parent && node->parent->type == PIPE)
-		{
+	{
 		if (node->side == LEFT)
 		{
 			if (node->parent->fd[1] != STDOUT_FILENO)
@@ -15,7 +15,7 @@ void ft_cleanup_parent(t_btree *node)
 				close(node->parent->fd[0]);
 			if (node->parent->parent && node->parent->parent->type == PIPE)
 			{
-				if(node->parent->parent->fd[1] != STDOUT_FILENO)
+				if (node->parent->parent->fd[1] != STDOUT_FILENO)
 					close(node->parent->parent->fd[1]);
 			}
 		}
@@ -24,7 +24,7 @@ void ft_cleanup_parent(t_btree *node)
 
 void	ft_cleanup_child(t_btree *node)
 {
-if (node->parent && node->parent->type == PIPE)
+	if (node->parent && node->parent->type == PIPE)
 	{
 		if (node->side == LEFT)
 		{
@@ -46,7 +46,6 @@ if (node->parent && node->parent->type == PIPE)
 
 static void	setup_child(char *full_path, t_btree *node, t_dico *dico)
 {
-
 	echo_control_seq(TRUE);
 	dup2(node->fd[0], STDIN_FILENO);
 	dup2(node->fd[1], STDOUT_FILENO);
@@ -67,7 +66,7 @@ static void	lookup_child(int *exit_code)
 			write(STDERR_FILENO, "Quit: 3\n", 8);
 		*exit_code = SIG_TERM_NUM + WTERMSIG(*exit_code);
 	}
-	else 
+	else
 		*exit_code = WEXITSTATUS(*exit_code);
 }
 
