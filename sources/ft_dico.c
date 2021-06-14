@@ -168,8 +168,8 @@ t_var	*ft_str_to_var(char *str, int verify)
 
 int	ft_sets_size_global(t_list *lst)
 {
-	int	len;
-	t_var *var;
+	int		len;
+	t_var	*var;
 
 	len = 0;
 	while (lst)
@@ -228,7 +228,7 @@ int	ft_set_dico(t_dico *dico, char **envp)
 	ft_rm_dico_var("OLDPWD", dico);
 	tmp = ft_get_dico_value("SHLVL", dico);
 	ft_set_dico_value(ft_strdup("SHLVL"), \
-			ft_itoa(ft_atoi(tmp)+1), GLOBAL, dico);
+			ft_itoa(ft_atoi(tmp) + 1), GLOBAL, dico);
 	free(tmp);
 	g_minishell.dico = dico;
 	return (0);
