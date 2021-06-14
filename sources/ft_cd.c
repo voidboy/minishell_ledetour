@@ -31,7 +31,7 @@ static int	update_dico(t_dico *dico, char *path, int code_return)
 	ft_set_dico_value(ft_strdup("OLDPWD"), oldpwd, GLOBAL, dico);
 	cwd = getcwd(NULL, 0);
 	if (cwd)
-		ft_set_dico_value(ft_strdup("PWD"), getcwd(NULL, 0), GLOBAL, dico);
+		ft_set_dico_value(ft_strdup("PWD"), cwd, GLOBAL, dico);
 	else if (code_return == 0)
 		ft_error((const char *[]){_strerror(ECD),
 			"error retrieving current directory: getcwd: ",
