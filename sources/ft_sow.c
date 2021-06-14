@@ -85,7 +85,7 @@ t_type	ft_split_op(char *line, char **s_op, char **s_left, char **s_right)
 	int		index;
 	char	**opstrs;
 
-	opstrs = (char *[7]){"(",")",";", "&&", "||", "|", NULL};
+	opstrs = (char *[7]){"(", ")", ";", "&&", "||", "|", NULL};
 	op = -1;
 	index = -1;
 	while (opstrs[++op])
