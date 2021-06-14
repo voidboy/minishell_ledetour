@@ -50,7 +50,7 @@ char	*_strerror(int _errno)
 {
 	static char	*strs_error[] = {
 		NULL,
-		"minishell: parse error near unexpected token",
+		"minishell: syntax error near unexpected token",
 		"minishell: multilines command are not supported",
 		"minishell: ",
 		"minishell: export: ",

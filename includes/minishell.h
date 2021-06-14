@@ -17,10 +17,12 @@
 # include <readline/readline.h>
 # include "libft.h"
 
+# define PARSE_ERR		258
 # define EXIT_ERR		255
 # define CMD_FOUND_NX	126
 # define CMD_NFOUND		127
 # define SIG_TERM_NUM	128
+# define EXIT_FORK		300
 # define ERROR			-1
 # define SUCCESS		0
 # define FAILURE		1
@@ -168,6 +170,7 @@ int		ft_set_envp(t_dico *dico);
 
 /* tree building  */
 t_btree	*ft_sow(char *line);
+t_btree	*root_node(t_btree *node);
 
 /* syntax verification */
 int		ft_prove(t_btree *root);
@@ -196,6 +199,7 @@ int		ft_exec(t_btree *node, t_dico *dico);
 /* >>> Utils */
 void	echo_control_seq(t_bool c);
 char	*add_linefeed(char *str);
+int		ft_tolong(const char *str, long long *nb);
 
 void	rl_replace_line (const char *text, int clear_undo);
 void	sig_hand_child(int n);

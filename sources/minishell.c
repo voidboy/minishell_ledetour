@@ -90,12 +90,20 @@ int main(int ac, char **argv, char **envp)
 	//	btree_show(root);
 		prove = ft_prove(root);
 		ft_here_doc_open(root);
-		if ( prove != -1 )
+		if (prove != -1)
 		{
-			ft_cross(root, &dico);
+			if (ft_cross(root, &dico) == 300)
+				ft_set_dico_value(ft_strdup("?"), ft_strdup("1") , LOCAL, &dico);
+			sig_apply(CHILD);
+			while(wait(NULL)!=-1)
+				;
+			sig_apply(PARENT);
+			echo_control_seq(FALSE);
 			//btree_show(root);
 			//ft_lstiter(dico.sets, ft_show_dico);
 		}
+		else 
+			ft_set_dico_value(ft_strdup("?"), ft_strdup("258"), LOCAL, &dico);
 		btree_apply_suffix(root, ft_free_node);
 		root = NULL;
 	}

@@ -196,6 +196,7 @@ int	ft_set_envp(t_dico *dico)
 int	ft_set_dico(t_dico *dico, char **envp)
 {
 	t_var	*var;
+	char	*tmp;
 
 	while (*envp)
 	{
@@ -206,6 +207,10 @@ int	ft_set_dico(t_dico *dico, char **envp)
 	}
 	ft_set_envp(dico);
 	ft_new_dico_var(ft_strdup("?"), ft_strdup("0"), LOCAL, dico);
+	ft_rm_dico_var("OLDPWD", dico);
+	tmp = ft_get_dico_value("SHLVL", dico);
+	ft_set_dico_value(ft_strdup("SHLVL"), ft_itoa(ft_atoi(tmp)+1), GLOBAL, dico);
+	free(tmp);
 	g_minishell.dico = dico;
 	return (0);
 }
