@@ -8,14 +8,14 @@ void	echo_control_seq(t_bool c)
 	ioctl(ttyslot(), TIOCGETA, &conf);
 	if (c == TRUE)
 		conf.c_lflag |= ECHOCTL;
-	else if	(c == FALSE)
+	else if (c == FALSE)
 		conf.c_lflag &= ~(ECHOCTL);
 	ioctl(ttyslot(), TIOCSETA, &conf);
 }
 
 char	*add_linefeed(char *str)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = str;
 	str = ft_strjoin(str, "\n");
@@ -43,7 +43,8 @@ int	ft_tolong(const char *str, long long *nb)
 		if (!ft_isdigit(*str))
 			return (0);
 		num = (num * 10) + (*str - 48);
-		if ((sign < 0 && num > ((unsigned long long)LLONG_MAX + 1)) || (sign > 0 && num > LLONG_MAX))
+		if ((sign < 0 && num > ((unsigned long long)LLONG_MAX + 1))
+			|| (sign > 0 && num > LLONG_MAX))
 			return (0);
 		str++;
 	}

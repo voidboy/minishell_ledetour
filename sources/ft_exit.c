@@ -16,7 +16,7 @@ static void	numeric_argument_required(char *arg)
 	exit(EXIT_ERR);
 }
 
-static int ft_last_return(t_btree *root, t_dico *dico)
+static int	ft_last_return(t_btree *root, t_dico *dico)
 {
 	int		i;
 	char	*tmp;
@@ -30,7 +30,7 @@ static int ft_last_return(t_btree *root, t_dico *dico)
 
 int	ft_exit(t_btree *node, t_dico *dico)
 {
-	long long i;
+	long long	i;
 
 	if (node->argv[1] && node->argv[2])
 		return (too_many_arguments());

@@ -2,7 +2,6 @@
 
 void	ft_pipes(t_btree *node)
 {
-
 	if (node->parent && node->parent->type == PIPE)
 	{
 		if (node->side == LEFT)
