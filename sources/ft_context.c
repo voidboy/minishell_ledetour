@@ -29,7 +29,10 @@ void	update_context(t_context *context, char current)
 		context->inside_Squote = !context->inside_Squote;
 	if (!context->escape && !context->inside_Squote && current == '"')
 		context->inside_Dquote = !context->inside_Dquote;
-	context->escape = current == '\\';
+	if (!context->escape && current == '\\')
+		context->escape = TRUE;
+	else if (current != '\n')
+		context->escape = FALSE;
 }
 
 void	context_error(void)
