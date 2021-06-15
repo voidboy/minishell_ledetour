@@ -20,7 +20,7 @@ void	btree_apply_suffix(t_btree *root, void (*applyf)(void *))
 	}
 }
 
-int	max(int i, int j)
+int	ft_max(int i, int j)
 {
 	if (i > j)
 		return (i);
@@ -30,7 +30,7 @@ int	max(int i, int j)
 int	btree_level_count(t_btree *root)
 {
 	if (root)
-		return (1 + max(btree_level_count(root->left), \
+		return (1 + ft_max(btree_level_count(root->left), \
 				btree_level_count(root->right)));
 	return (0);
 }
@@ -41,11 +41,4 @@ t_btree	*rightest_node(t_btree *root)
 		if (root->right)
 			return (rightest_node(root->right));
 	return (root);
-}
-
-t_btree	*root_node(t_btree *node)
-{
-	if (node && node->parent)
-		return (root_node(node->parent));
-	return (node);
 }
