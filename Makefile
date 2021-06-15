@@ -1,9 +1,6 @@
 NAME	=	minishell
 
-# -------  ADD -Werror ! -------
-
-FLAG	= 	-Wall -Wextra -I ./includes -I ./libft/
-#FLAG 	+=	-g -ggdb  -fsanitize=address
+FLAG	= 	-Wall -Wextra -Werror -I ./includes -I ./libft/
 SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_assign.c \
 			sources/ft_assign_utils.c \
@@ -42,9 +39,7 @@ SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_env.c \
 			sources/minishell.c \
 			sources/minishell_sighandlers.c \
-			sources/ft_here_doc_open.c \
-			tests/btree_show.c \
-			tests/dico_show.c \
+			sources/ft_here_doc_open.c 
 
 CC		=	gcc
 
