@@ -6,7 +6,7 @@
 /*   By: etakouer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 16:42:33 by etakouer          #+#    #+#             */
-/*   Updated: 2021/06/06 13:29:46 by etakouer         ###   ########.fr       */
+/*   Updated: 2021/06/15 09:29:47 by etakouer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 
 	i = -1;
 	if (!s1 || !s2)
-		return i;
+		return (i);
 	while (s1[++i] && s2[i] && s1[i] == s2[i])
 		;
 	return (s1[i] - s2[i]);
