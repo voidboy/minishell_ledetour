@@ -47,8 +47,6 @@ typedef enum e_way {
 }			t_way;
 
 typedef enum e_type {
-	POPEN,
-	PCLOSE,
 	SEMICOLON,
 	AND,
 	OR,
