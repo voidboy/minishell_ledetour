@@ -142,6 +142,7 @@ void	parse_error(t_btree *node, char last);
 int		check_left(t_btree *node);
 int		check_right(t_btree *node);
 char	*_strerror(int _errno);
+int		pick_error(t_type t);
 int		ft_free_strs(char **strs);
 void	ft_free_node(void *_node);
 void	ft_free(t_btree *root, t_dico *dico);
@@ -174,6 +175,7 @@ int		ft_prove(t_btree *root);
 
 /* her doc */
 int		ft_here_doc_open(t_btree *root);
+int		ft_here_doc(t_btree *node, int start, int len);
 
 /* commands lookup INFIX */
 int		ft_cross(t_btree *root, t_dico *dico);
@@ -190,8 +192,12 @@ int		ft_redir(t_btree *node);
 int		ft_apply_redir(t_btree *node, t_dico *dico);
 
 /* execution */
+void	ft_cleanup_parent(t_btree *node);
+void	ft_cleanup_child(t_btree *node);
 char	*ft_search_path(char *exec, char *path);
 int		ft_exec(t_btree *node, t_dico *dico);
+void	setup_child(char *full_path, t_btree *node, t_dico *dico);
+void	lookup_child(int *exit_code);
 
 /* >>> Utils */
 void	echo_control_seq(t_bool c);
@@ -209,6 +215,10 @@ char	*ft_sanitize(char *str);
 
 /* expension */
 char	*ft_expander(char *str, t_dico *dico);
+char	*ft_escape_exp(char *str);
+t_bool	is_expension(char *str, int i);
+void	dollar_exception1(char *src, int *i, t_context c);
+void	dollar_exception2(char **expanded, int *i, int *j);
 
 /* quoting */
 int		ft_quoting(char *str, int *i, char *newstr);

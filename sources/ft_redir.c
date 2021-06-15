@@ -62,6 +62,13 @@ static int	epilog(t_btree *node, char *cmd_wo_redir, int i, int j)
 	return (exit_code);
 }
 
+static void	merci_normi(int *i, int *j, t_context *c)
+{
+	init_context(c);
+	*j = 0;
+	*i = 0;
+}
+
 int	ft_redir(t_btree *node)
 {	
 	int			i;
@@ -69,9 +76,7 @@ int	ft_redir(t_btree *node)
 	char		*cmd_wo_redir;
 	t_context	c;
 
-	init_context(&c);
-	j = 0;
-	i = 0;
+	merci_normi(&i, &j, &c);
 	cmd_wo_redir = malloc(sizeof(char) * ft_strlen(node->cmd) + 1);
 	if (!cmd_wo_redir)
 		return (ft_error((const char *[]){_strerror(errno), "\n", NULL}, TRUE));
@@ -83,7 +88,7 @@ int	ft_redir(t_btree *node)
 				break ;
 			update_context(&c, node->cmd[i]);
 		}
-		else 
+		else
 		{
 			update_context(&c, node->cmd[i]);
 			cmd_wo_redir[j++] = node->cmd[i++];

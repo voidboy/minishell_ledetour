@@ -3,7 +3,7 @@ NAME	=	minishell
 # -------  ADD -Werror ! -------
 
 FLAG	= 	-Wall -Wextra -I ./includes -I ./libft/
-FLAG 	+=	-g -ggdb  -fsanitize=address
+#FLAG 	+=	-g -ggdb  -fsanitize=address
 SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_assign.c \
 			sources/ft_break.c \
@@ -17,10 +17,16 @@ SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_cross.c \
 			sources/ft_dico.c \
 			sources/ft_error.c \
+			sources/ft_error_free.c \
+			sources/ft_error_utils.c \
 			sources/ft_exec.c \
+			sources/ft_exec_child.c \
+			sources/ft_exec_cleanup.c \
 			sources/ft_expander.c \
+			sources/ft_expander_utils.c \
 			sources/ft_pipes.c \
 			sources/ft_prove.c \
+			sources/ft_prove_utils.c \
 			sources/ft_quoting.c \
 			sources/ft_redir.c \
 			sources/ft_redir_utils.c \
@@ -30,6 +36,7 @@ SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_unset.c \
 			sources/ft_env.c \
 			sources/minishell.c \
+			sources/minishell_sighandlers.c \
 			sources/ft_here_doc_open.c \
 			tests/btree_show.c \
 			tests/dico_show.c \
