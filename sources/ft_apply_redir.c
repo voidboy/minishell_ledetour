@@ -56,18 +56,14 @@ int	ft_apply_here_doc(t_btree *node, t_dico *dico)
 
 static int	expand_filename(t_redir *redir, t_dico *dico)
 {
-	char	*filename;
-
-	filename = strdup(redir->filename);
-	if (!filename)
+	if (!redir->filename)
 		ft_error((const char *[]){_strerror(errno), "\n"}, TRUE);
-	if (*filename == '$')
-		ft_error((const char *[]){_strerror(EEMPTY), filename,
+	if (*(redir->filename) == '$')
+		ft_error((const char *[]){_strerror(EEMPTY), redir->filename,
 			": ambiguous redirect\n", NULL}, FALSE);
 	redir->filename = ft_expander(redir->filename, dico);
 	if (!*redir->filename)
 	{
-		free(filename);
 		return (1);
 	}
 	redir->filename = ft_sanitize(redir->filename);

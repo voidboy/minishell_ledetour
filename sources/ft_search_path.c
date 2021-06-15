@@ -53,7 +53,7 @@ static char	*path_lookup(char *exec, char *path)
 			paths[i] = ft_strjoin_free(paths[i], "/");
 		paths[i] = ft_strjoin_free(paths[i], exec);
 		fd = open(paths[i], O_RDONLY);
-		if (fd != -1)
+		if (!found && fd != -1)
 		{
 			found = paths[i];
 			close(fd);
