@@ -47,8 +47,6 @@ typedef enum e_way {
 }			t_way;
 
 typedef enum e_type {
-	POPEN,
-	PCLOSE,
 	SEMICOLON,
 	AND,
 	OR,
@@ -85,7 +83,6 @@ typedef enum e_stage{
 	HERE_OPEN,
 	CHILD,
 }			t_stage;
-
 
 typedef struct s_context {
 	t_bool	inside_Squote;
@@ -206,7 +203,6 @@ void	sig_hand_child(int n);
 void	sig_hand_parent(int n);
 void	sig_hand_here(int n);
 void	sig_apply(t_stage stage);
-
 
 /* sanitize */
 char	*ft_sanitize(char *str);

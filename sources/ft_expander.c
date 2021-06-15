@@ -8,6 +8,8 @@ char	*ft_escape_exp(char *str)
 
 	i = -1;
 	j = 0;
+	if (!str)
+		return (NULL);
 	while (str[++i])
 		if (str[i] == '\\' || str[i] == '\"' || str[i] == '\'')
 			j++;

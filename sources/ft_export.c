@@ -56,11 +56,17 @@ void	ft_export_var(t_var *var, char *arg, t_dico *dico, int plus)
 	free(var);
 }
 
-void	ft_print_export_error(char *str, int *code_return)
+void	ft_print_export_error(char *str, t_var *var, int *code_return)
 {
 	ft_error((const char *[]){_strerror(EEXPORT), \
 					"`", str, "': not a valid identifier\n", NULL}, FALSE);
 	*code_return = 1;
+	if (var)
+	{
+		free(var->key);
+		free(var->value);
+	}
+	free(var);
 }
 
 int	ft_export(t_btree *node, t_dico *dico)
@@ -82,10 +88,10 @@ int	ft_export(t_btree *node, t_dico *dico)
 			var = ft_str_to_var(*argv, 1);
 		if (**argv && !var)
 			var = ft_str_to_varplus(*argv, &plus);
-		if (var)
+		if (var && var->key)
 			ft_export_var(var, *argv, dico, plus);
 		else
-			ft_print_export_error(*argv, &code_return);
+			ft_print_export_error(*argv, var, &code_return);
 		argv++;
 	}
 	return (code_return);
