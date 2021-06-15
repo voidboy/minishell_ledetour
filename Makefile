@@ -6,6 +6,8 @@ FLAG	= 	-Wall -Wextra -I ./includes -I ./libft/
 FLAG 	+=	-g -ggdb  -fsanitize=address
 SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_assign.c \
+			sources/ft_assign_utils.c \
+			sources/ft_assign_prepare.c \
 			sources/ft_break.c \
 			sources/ft_btree.c \
 			sources/ft_echo.c \
@@ -16,16 +18,20 @@ SRCS	=	sources/ft_apply_redir.c \
 			sources/ft_context.c \
 			sources/ft_cross.c \
 			sources/ft_dico.c \
+			sources/ft_dico_show.c \
+			sources/ft_dico_utils.c \
 			sources/ft_error.c \
 			sources/ft_exec.c \
 			sources/ft_expander.c \
 			sources/ft_pipes.c \
 			sources/ft_prove.c \
 			sources/ft_quoting.c \
+			sources/ft_sanitize.c \
 			sources/ft_redir.c \
 			sources/ft_redir_utils.c \
 			sources/ft_search_path.c \
 			sources/ft_sow.c \
+			sources/ft_sow_utils.c \
 			sources/ft_export.c \
 			sources/ft_unset.c \
 			sources/ft_env.c \

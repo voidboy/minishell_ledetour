@@ -152,28 +152,40 @@ t_bool	is_delimiter(char c);
 t_bool	is_redirection(char c);
 
 /* >>> Dico */
-char	*ft_get_dico_value(char *key, t_dico *dico);
-void	ft_show_dico(void *content);
-int		ft_set_dico_value(char *key, char *value, t_scope scope, t_dico *dico);
-int		ft_set_dico(t_dico *dico, char **envp);
-int		ft_new_dico_var(char *key, char *value, t_scope scope, t_dico *dico);
-t_var	*ft_str_to_var(char *str, int verify);
-t_var	*ft_get_dico_var(char *key, t_dico *dico);
+void	ft_escape_declare(char *str, int fd);
+void	ft_show_var(t_var *var, int declare, int fd);
 int		ft_show_envp(t_dico *dico, int declare, int fd);
+
+t_var	*ft_get_dico_var(char *key, t_dico *dico);
 int		ft_rm_dico_var(char *key, t_dico *dico);
+int		ft_new_dico_var(char *key, char *value, t_scope scope, t_dico *dico);
+int		ft_set_dico_value(char *key, char *value, t_scope scope, t_dico *dico);
+
+char	*ft_get_dico_value(char *key, t_dico *dico);
+t_var	*ft_str_to_var(char *str, int verify);
+int		ft_sets_size_global(t_list *lst);
 int		ft_set_envp(t_dico *dico);
+int		ft_set_dico(t_dico *dico, char **envp);
 
 /* >>> Core */
 
 /* tree building  */
 t_btree	*ft_sow(char *line);
-t_btree	*root_node(t_btree *node);
+t_type	ft_split_op(char *line, char **s_op, char **s_left, char **s_right);
+t_btree	*btree_new_node(char *cmd, t_btree *parent, t_side side, t_type op);
+t_btree	*ft_wrap_sow(char *line, t_btree *parent, t_side side);
+
+char	*ft_cmdtrim(char *s);
+int		ft_find_last(char *hay, char *need);
+int		ft_op_is_finded(t_type *op, int *index);
 
 /* syntax verification */
 int		ft_prove(t_btree *root);
 
 /* her doc */
 int		ft_here_doc_open(t_btree *root);
+int		ft_readoneline(t_btree *node);
+void	ft_here_doc_read(void *_node);
 
 /* commands lookup INFIX */
 int		ft_cross(t_btree *root, t_dico *dico);
@@ -184,6 +196,20 @@ void	ft_cleanup_fd(t_btree *node);
 
 /* assignation */
 int		ft_assign(t_btree *node, t_dico *dico);
+void	ft_set_var(t_btree *node, t_var *var, t_index_var *ivar);
+int		ft_extract_assign(t_btree *node, t_list *lstassign, t_var *vars);
+int		ft_apply_assign(t_var *vars, t_dico *dico, int nbvars);
+void	ft_create_argv(t_btree *node, t_dico *dico);
+
+void	ft_free_lstassign(void *ivar);
+int		ft_free_vars(t_var *var, int len, int r);
+int		ft_get_varkey(char *str, int i);
+int		ft_get_varvalue(char *str, int i);
+int		ft_goto_assign(char *str, int *i);
+
+void	ft_find_assign(char *str, t_list **lstassign, int index);
+int		ft_len_extact_assign(char *str, t_list *lstassign);
+char	*ft_create_newcmd(t_btree *node, t_list *lstassign, t_var *vars);
 
 /* redirection */
 int		ft_redir(t_btree *node);
@@ -206,15 +232,22 @@ void	sig_apply(t_stage stage);
 
 /* sanitize */
 char	*ft_sanitize(char *str);
+int		ft_len_sanitize(char *str);
 
 /* expension */
 char	*ft_expander(char *str, t_dico *dico);
 
 /* quoting */
-int		ft_quoting(char *str, int *i, char *newstr);
+int	ft_dbl_quoting(char *str, int *i, char *newstr);
+int	ft_simple_quoting(char *str, int *i, char *newstr);
+int	ft_backslash(char *str, int *i, char *newstr);
+int	ft_quoting(char *str, int *i, char *newstr);
 
 /* break */
 char	**ft_break(char *str, char *charset);
+char	*ft_strstr(char *str, char *to_find);
+char	**ft_add_str(char **tab_str, char *str, int size_tab);
+char	*ft_create_str(char *start, char *end);
 
 /* >>> Built-in */
 
@@ -229,9 +262,14 @@ int		ft_pwd(t_btree *node, t_dico *dico);
 
 /* export */
 int		ft_export(t_btree *node, t_dico *dico);
+t_var	*ft_str_to_varplus(char *str, int *plus);
+void	ft_join_var(t_var *var, t_dico *dico);
+void	ft_export_var(t_var *var, char *arg, t_dico *dico, int plus);
+void	ft_print_export_error(char *str, t_var *var, int *code_return);
 
 /* unset */
 int		ft_unset(t_btree *node, t_dico *dico);
+int		ft_isvalid_id(char *str);
 
 /* env */
 int		ft_env(t_btree *node, t_dico *dico);
@@ -246,6 +284,7 @@ void	btree_free(t_btree *root);
 int		btree_level_count(t_btree *root);
 void	btree_free(t_btree *root);
 t_btree	*rightest_node(t_btree *root);
+t_btree	*root_node(t_btree *node);
 
 /* >>> context */
 void	init_context(t_context *context);
@@ -255,6 +294,10 @@ void	update_context(t_context *context, char current);
 void	context_error(void);
 
 /* >>> tests */
-void	btree_show(t_btree *root);
-void	ft_printstrs(char **strs, const char *prefix);
+void	btree_apply_infix(t_btree *root, void (*applyf)(void *));
+void	btree_apply_suffix(t_btree *root, void (*applyf)(void *));
+int		ft_max(int i, int j);
+int		btree_level_count(t_btree *root);
+t_btree	*rightest_node(t_btree *root);
+
 #endif
