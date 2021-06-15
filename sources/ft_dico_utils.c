@@ -77,5 +77,3 @@ int	ft_set_dico_value(char *key, char *value, t_scope scope, t_dico *dico)
 		ft_set_envp(dico);
 	return (0);
 }
-
-

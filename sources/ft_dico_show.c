@@ -44,4 +44,3 @@ int	ft_show_envp(t_dico *dico, int declare, int fd)
 	}
 	return (0);
 }
-

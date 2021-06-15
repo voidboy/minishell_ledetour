@@ -248,10 +248,10 @@ void	dollar_exception1(char *src, int *i, t_context c);
 void	dollar_exception2(char **expanded, int *i, int *j);
 
 /* quoting */
-int	ft_dbl_quoting(char *str, int *i, char *newstr);
-int	ft_simple_quoting(char *str, int *i, char *newstr);
-int	ft_backslash(char *str, int *i, char *newstr);
-int	ft_quoting(char *str, int *i, char *newstr);
+int		ft_dbl_quoting(char *str, int *i, char *newstr);
+int		ft_simple_quoting(char *str, int *i, char *newstr);
+int		ft_backslash(char *str, int *i, char *newstr);
+int		ft_quoting(char *str, int *i, char *newstr);
 
 /* break */
 char	**ft_break(char *str, char *charset);

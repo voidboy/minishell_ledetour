@@ -76,4 +76,3 @@ int	ft_op_is_finded(t_type *op, int *index)
 	}
 	return (0);
 }
-
